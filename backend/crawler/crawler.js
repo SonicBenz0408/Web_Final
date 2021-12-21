@@ -28,7 +28,7 @@ const parse = (html, type) => {
             var addr = ytPrefix + $(link).find("#thumbnail").attr("href")
             var img = $(link).find("#img").attr("src")
             var title = $(link).find("#video-title").attr("title")
-            var time = $(link).find("#metadata-line span")[1].children[0].data.substring(32).slice.(0, -19)
+            var time = $(link).find("#metadata-line span")[1].children[0].data.substring(7)
             results.push({addr: addr, img: img, title: title, time: time})
         })
     }
@@ -37,17 +37,17 @@ const parse = (html, type) => {
     return results
 }
 
-const crawl = async (name) => {
+const crawl = async (corps, name) => {
     const browser = await puppeteer.launch({
         args: ["--no-sandbox"]
     })
     const page = await browser.newPage()
-    var url = ytPrefix + "channel/" + vtInfo["name"][name] + liveSuffix
+    var url = ytPrefix + "channel/" + vtInfo[corps][name] + liveSuffix
     await page.goto(url, {timeout:0})
     var html = await page.content()
     const liveResults = parse(html, "live")
 
-    url = ytPrefix + "channel/" + vtInfo["name"][name] + tempSuffix
+    url = ytPrefix + "channel/" + vtInfo[corps][name] + tempSuffix
     await page.goto(url)
     html = await page.content()
     const tempResults = parse(html, "temp")
