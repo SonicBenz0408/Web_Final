@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
         *{
             margin: 0;
             padding: 0;
-            font-family: "微軟正黑體";
+            font-family: 'DotGothic16', sans-serif;
         }
         body, html{
             width: 100%;
             height: 100%;
         }
         .wrap{
-            overflow: scroll;
             width: 100%;
-            height: 100%;
+            height: 800px;
             background: linear-gradient(180deg, rgb(30, 160, 210), rgb(50, 40, 110));
             display: flex;
             justify-content: center;
@@ -27,14 +27,13 @@
         }
         .box{
             width: 400px;
-            height: 600px;
-            /* background-color: #fff; */
+            height: 500px;
+            transform: translateY(-40px);
         }
         .top_side{
             width: 100%;
             height: 30%;
             text-align: center;
-            /* background-color: #00f; */
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -65,35 +64,50 @@
             display: flex;
             align-items: center;
         }
-        .group > label{
-            width: 36px;
-            text-align: center;
-        }
         .group > input{
             width: 220px;
             padding: 10px;
             border-radius: 2px;
             background-color: rgb(240, 245, 245);
             border: none;
+            transition: .5s;
         }
         .group > input:focus{
             outline: none;
+            background-color: rgb(220, 225, 225);
+        }
+        .group > input:hover{
+            background-color: rgb(220, 225, 225);    
         }
         .group .login{
+            width: 100%;
             font-size: 12px;
+            text-align: center;
             background-color: rgb(30, 170, 225);
             border-radius: 3px;
-            padding: 10px 30px 12px;
+            border: none;
+            padding: 8px 0px 10px;
             color: #fff;
             cursor: pointer;
-        }
-        .signgroup{
-            /* width: 256px; */
-            justify-content: space-between;
-        }
-        .signgroup > .login:hover{
-            color: #000;
             transition: .3s;
+        }
+        /* .signgroup{
+            justify-content: space-between;
+        } */
+        .group > .login:hover{
+            color: #000;
+        }
+        .signup{
+            margin-top: 20px;
+            color: gray;
+        }
+        .signup > span{
+            text-decoration: underline;
+            cursor: pointer;
+            transition: .3s;
+        }
+        .signup > span:hover{
+            color: #000;
         }
     </style>
 </head>
@@ -114,12 +128,11 @@
                     <input type="password" name="" id="user_password" placeholder="密碼">
                 </div>
                 <div class="group signgroup">
-                    <div class="login">登入</div>
-                    <div>or</div>
-                    <div class="login">註冊</div>
+                    <button class="login">登入</button>
+                    <!-- <div>or</div>
+                    <div class="login">註冊</div> -->
                 </div>
-                
-
+                <div class="signup">還沒有帳號? <span>註冊一個 </span></div>
             </div>
         </div>
     </div>

@@ -15,6 +15,8 @@ const Wrapper = styled.div`
 
 function App() {
 
+    const client = new WebSocket("ws://localhost:4000")
+
     const [nowUser, setNowUser] = useState(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -22,6 +24,7 @@ function App() {
     const [register, setRegister] = useState(false)
 
     const signInScene = <SignIn
+        client={client}
         username={username}
         password={password}
         setSignedIn={setSignedIn}

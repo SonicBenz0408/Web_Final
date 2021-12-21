@@ -1,12 +1,12 @@
+import WebSocket from "ws"
+import http from "http"
 import express from "express"
-import cors from "cors"
-import mongoose from "mongoose"
+import mongoose, { models } from "mongoose" 
 import dotenv from "dotenv-defaults"
-import vtRouter from "./routes/router.js"
-import bodyParser from "body-parser"
-import crawl from "./crawler/crawler.js"
-//import crawl from "./crawler/crawler.js"
-// Mongoose DB
+import { sendData, sendStatus, initData } from "./wssConnect"
+import User from "./models/User"
+import bcrypt from "bcrypt"
+
 dotenv.config()
 
 if(!process.env.MONGO_URL){
@@ -18,25 +18,88 @@ mongoose.connect(process.env.MONGO_URL, {
     useUnifiedTopology: true
 })
 
-const db = mongoose.connection
-const app = express()
-// init middleware
-app.use(cors())
-app.use(bodyParser.json())
-// define routes
-app.use("/api", vtRouter)
+const saltRounds = 10
 
-//db.on("error", (err) => console.log(err))
-db.once("open", async () => {
-    console.log("MongoDB connected successfully!")
+const app = express()
+const server = http.createServer(app)
+const wss = new WebSocket.Server({ server })
+
+const db = mongoose.connection
+
+const broadcastMessage = (data, status) => {
+    wss.clients.forEach(async (client) => {
+        console.log("data", data)
+        console.log("status", status)
+        sendData(data, client)
+        sendStatus(status, client)
+    })
+}
+
+db.once("open", () => {
+    console.log("MongoDB connected")
+
+    wss.on("connection", (ws) => {
+        ws.onmessage = async (byteString) => {
+            const { data } = byteString
+            const [task, payload] = JSON.parse(data)
+            console.log(payload)
+            switch (task) {
+                case "init": {
+                    initData(ws)
+                    break
+                }
+                case "login": {
+                    const { username, password } = payload[0]
+                    const userHash = await User.find({username: username})
+                    if(userHash.length === 0){
+                        sendData([ "login", [{ msg: "The username doesn't exist." , status: "not exist" }]], ws)
+                        console.log("Username doesn't exist")
+                    }
+                    else{
+                        console.log(userHash)
+                        const check = await bcrypt.compare(password, userHash[0].hash)
+                        if(check){
+                            sendData([ "login", [{ msg: "Login successfully!", status: "success"}]], ws)
+                            console.log(`${username} logs in!`)
+                        }
+                        else{
+                            sendData([ "login", [{ msg: "Wrong password!", status: "failed"}]], ws)
+                            console.log(`${username}: wrong password!`)
+                        }
+                    }
+                    break
+                }
+                case "regist": {
+                    const { username, password } = payload[0]
+                    const check = await User.find({username: username})
+                    
+                    if(check.length !== 0){
+                        sendData([ "regist", [{ msg: "The username has already existed." , status: "exist" }]], ws)
+                        console.log("Username has already existed")
+                    }
+                    else{
+                        try{
+                            const hash = await bcrypt.hash(password, saltRounds)
+                            const userInfo = new User({ username, hash })
+                            await userInfo.save()
+                            sendData([ "regist", [{ msg: `Done! Please login again!` , status: "success"}]], ws)
+                            console.log("Done!")
+                        }
+                        catch(e){
+                            sendData([ "regist", [{ msg: "DB save error!", status: "error"}]], ws)
+                            console.log("Error!" + e)
+                        }
+                    }
+                    break
+                }
+                default: break
+            }
+        }
+    })
     
-    //var info = await crawl("Mori Calliope")
-    //console.log(info)
-    // define server
-    const port = process.env.PORT || 4000
-    app.listen(port, () => {
-    console.log(`Server is up on port ${port}.`)
+    const PORT = process.env.port || 4000
+
+    server.listen(PORT, () => {
+        console.log(`Listening on http://localhost:${PORT}`)
     })
 })
-
-

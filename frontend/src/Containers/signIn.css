@@ -1,6 +1,5 @@
 .login-title {
     color: white;
-    font-weight: bold;
     font-size: 30px;
 }
 
@@ -8,37 +7,74 @@
     padding: 50px 20px 20px 20px;
     width: 400px ;
     height: 400px ;
-    background-color: white ;
+    background-color: rgb(255, 255, 255) ;
     box-shadow: rgb(58, 109, 123) 5px 5px 20px ;
     border-radius: 10px ;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
-.form-input {
-    width: 350px;
-    
+.ant-form-item-has-error .form-input input{
+  background-color: green;
+  border-color: #4d56ff;
+}
+
+.form-input{
+    width: 250px;
+    height: 40px ;
+    border-radius: 2px;
+    background-color: rgb(240, 245, 245);
+    border: none;
+    transition: .5s;
+}
+.form-input input{
+    border-radius: 2px;
+    background-color: rgb(240, 245, 245);
+    border: none;
+    transition: .5s;
+}
+
+.form-input:focus{
+    outline: none;
+    background-color: rgb(220, 225, 225);
+}
+.form-input:hover{
+    background-color: rgb(220, 225, 225);    
+}
+
+.form-input:focus > input{
+    outline: none;
+    background-color: rgb(220, 225, 225);
+}
+.form-input:hover > input{
+    background-color: rgb(220, 225, 225);    
 }
 
 .login-button-container {
-    display: flex;
-    flex-direction: row ;
     justify-content: center;
     align-items: center;
 }
 
 .login-form-button {
-    width: 120px;
-}
-.or {
-    border: none;
-    color: black ;
-    width: 120px;
-    background-color: white;
-    cursor: default;
-}
-.or:hover {
-    color: black;
+    width: 200px;
 }
 
-.or::after{
-    display:none;
+.regis-word{
+    margin-top: 20px;
+    color: gray;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
+.regis-word > span{
+    text-decoration: underline;
+    cursor: pointer;
+    transition: .3s;
+    margin-left: 10px;
+}
+.regis-word > span:hover{
+    color: #000;
+}
+
