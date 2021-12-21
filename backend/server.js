@@ -30,8 +30,8 @@ app.use("/api", vtRouter)
 db.once("open", async () => {
     console.log("MongoDB connected successfully!")
     
-    var info = await crawl("Mori Calliope")
-    console.log(info)
+    //var info = await crawl("Mori Calliope")
+    //console.log(info)
     // define server
     const port = process.env.PORT || 4000
     app.listen(port, () => {

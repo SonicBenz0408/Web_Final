@@ -1,0 +1,44 @@
+.login-title {
+    color: white;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.login-form {
+    padding: 50px 20px 20px 20px;
+    width: 400px ;
+    height: 400px ;
+    background-color: white ;
+    box-shadow: rgb(58, 109, 123) 5px 5px 20px ;
+    border-radius: 10px ;
+}
+
+.form-input {
+    width: 350px;
+    
+}
+
+.login-button-container {
+    display: flex;
+    flex-direction: row ;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-form-button {
+    width: 120px;
+}
+.or {
+    border: none;
+    color: black ;
+    width: 120px;
+    background-color: white;
+    cursor: default;
+}
+.or:hover {
+    color: black;
+}
+
+.or::after{
+    display:none;
+}

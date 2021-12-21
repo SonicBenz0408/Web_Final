@@ -43,7 +43,7 @@ const crawl = async (name) => {
     })
     const page = await browser.newPage()
     var url = ytPrefix + "channel/" + vtInfo["name"][name] + liveSuffix
-    await page.goto(url)
+    await page.goto(url, {timeout:0})
     var html = await page.content()
     const liveResults = parse(html, "live")
 

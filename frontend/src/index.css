@@ -1,10 +1,24 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-family: "微軟正黑體";
+}
+
 body {
   margin: 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(180deg, rgb(30, 160, 210), rgb(50, 40, 110));
+  background-size: cover;
+  
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  
 }
 
 code {
