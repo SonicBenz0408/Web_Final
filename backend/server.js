@@ -3,7 +3,7 @@ import http from "http"
 import express from "express"
 import mongoose, { models } from "mongoose" 
 import dotenv from "dotenv-defaults"
-import { sendData, sendStatus, initData } from "./wssConnect"
+import { sendData, sendStatus, initData, favorData } from "./wssConnect"
 import User from "./models/User"
 import bcrypt from "bcrypt"
 
@@ -37,15 +37,20 @@ const broadcastMessage = (data, status) => {
 
 db.once("open", () => {
     console.log("MongoDB connected")
-
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
             const [task, payload] = JSON.parse(data)
-            console.log(payload)
+            console.log(task, payload)
             switch (task) {
                 case "init": {
                     initData(ws)
+                    break
+                }
+                case "favor": {
+                    const {username} = payload[0]
+                    const user = await User.findOne({ username })
+                    favorData(ws, user.favor)
                     break
                 }
                 case "login": {
@@ -89,6 +94,19 @@ db.once("open", () => {
                             sendData([ "regist", [{ msg: "DB save error!", status: "error"}]], ws)
                             console.log("Error!" + e)
                         }
+                    }
+                    break
+                }
+                // subscribe channel
+                case "subscribe": {
+                    const { username, id } = payload[0]
+                    let  user = await User.findOne({username})
+                    if( !user.favor.includes(id) ){
+                        const new_favor = [...user.favor, id]
+                        user = await User.findOneAndUpdate({username}, {favor: new_favor},{
+                            new: true
+                        })
+                        console.log("subscribe: ", user)
                     }
                     break
                 }
