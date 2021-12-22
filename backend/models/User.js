@@ -10,7 +10,10 @@ const UserSchema = new Schema({
         type: String,
         required: [true, "Hash field is required."]
     },
-    favor: []
+    favor: {
+        type: Array,
+        required: [true, "Favor field is required."]
+    }
 })
 
 const User = mongoose.model("User", UserSchema)

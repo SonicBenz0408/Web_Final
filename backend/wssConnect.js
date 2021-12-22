@@ -26,7 +26,7 @@ const initData = async (ws) => {
         .exec((err, res) => {
             if(err) throw err
             init_data.upstream = res
-            console.log("init_data",init_data)
+            // console.log("init_data",init_data)
             sendData(["init", init_data], ws)
         })    
 }
@@ -46,14 +46,14 @@ const favorData = async (ws, filter) => {
         .exec((err, res) => {
             if(err) throw err
             favorData.stream = res
-            console.log(res)
+            // console.log(res)
             // sendData(["init", res], ws)
         })
     await Upcoming.find({'id': {$in: filter}}, "-_id -__v").sort({ created_at: -1 }).limit(100)
         .exec((err, res) => {
             if(err) throw err
             favor_data.upstream = res
-            console.log("favor_data", favor_data)
+            // console.log("favor_data", favor_data)
             sendData(["favor", favor_data], ws)
         })
 

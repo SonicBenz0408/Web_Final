@@ -85,7 +85,8 @@ db.once("open", () => {
                     else{
                         try{
                             const hash = await bcrypt.hash(password, saltRounds)
-                            const userInfo = new User({ username, hash })
+                            const favor = []
+                            const userInfo = new User({ username, hash, favor })
                             await userInfo.save()
                             sendData([ "regist", [{ msg: `Done! Please login again!` , status: "success"}]], ws)
                             console.log("Done!")
