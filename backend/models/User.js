@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     hash: {
         type: String,
         required: [true, "Hash field is required."]
-    }
+    },
+    favor: []
 })
 
 const User = mongoose.model("User", UserSchema)

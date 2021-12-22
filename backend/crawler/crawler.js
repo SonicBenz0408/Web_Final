@@ -39,7 +39,8 @@ const parse = (html, type) => {
 
 const crawl = async (corps, name) => {
     const browser = await puppeteer.launch({
-        args: ["--no-sandbox"]
+        args: ["--no-sandbox"],
+        headless: true
     })
     const page = await browser.newPage()
     var url = ytPrefix + "channel/" + vtInfo[corps][name] + liveSuffix

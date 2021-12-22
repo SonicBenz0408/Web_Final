@@ -68,6 +68,7 @@ const SignIn = ({client, username, password, setSignedIn, setUsername, setPasswo
 */
     client.onmessage = (byteString) => {
         const { data } = byteString
+        console.log(data)
         const [task, payload] = JSON.parse(data)
         console.log(task)
         console.log(payload)
