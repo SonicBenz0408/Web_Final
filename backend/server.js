@@ -6,6 +6,7 @@ import dotenv from "dotenv-defaults"
 import { sendData, sendStatus, initData, favorData } from "./wssConnect"
 import User from "./models/User"
 import bcrypt from "bcrypt"
+import crawl from "./crawler/crawler"
 
 dotenv.config()
 
@@ -35,8 +36,10 @@ const broadcastMessage = (data, status) => {
     })
 }
 
-db.once("open", () => {
+db.once("open", async () => {
     console.log("MongoDB connected")
+    //const output = await crawl("Hololive", "宝鐘マリン")
+    //console.log(output)
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString

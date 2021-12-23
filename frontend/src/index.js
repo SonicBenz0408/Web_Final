@@ -5,6 +5,7 @@ import App from './Containers/App';
 import reportWebVitals from './reportWebVitals';
 import "antd/dist/antd.css" ;
 import './Containers/signIn.css'
+import './Containers/regist.css'
 
 ReactDOM.render(
   <App />,

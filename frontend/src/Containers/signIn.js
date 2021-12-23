@@ -1,10 +1,9 @@
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button, Checkbox, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
-import axios from "../api/api";
 
 
-const SignIn = ({client, username, password, setSignedIn, setUsername, setPassword, setRegister, setNowUser}) => {
+const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, setUsername, setPassword, setRegister, setNowUser, navigate}) => {
     
     const onFinish = (values) => {
         console.log('Success:', values)
@@ -17,55 +16,7 @@ const SignIn = ({client, username, password, setSignedIn, setUsername, setPasswo
     const handleChange = (func) => (event) => {
 		func(event.target.value);
 	}
-/*
-    const logIn = async () => {
-        const {
-        data: { msg, status }, 
-        } = await axios.post('/api/login', { 
-            username, 
-            password,
-        })
-        
-        if(status === "not exist"){
-            window.alert(msg)
-            setUsername("")
-            setPassword("")
-        }
-        else if(status === "failed"){
-            window.alert(msg)
-            setPassword("")
-        }
-        else{
-            setSignedIn(true)
-            setNowUser(username)
-        }
-    }
 
-    const regist = async () => {
-        console.log(username)
-        console.log(password)
-        const {
-        data: { msg, status }, 
-        } = await axios.post('/api/register', { 
-            username, 
-            password,
-        })
-        
-        if(status === "exist"){
-            window.alert(msg)
-            setUsername("")
-            setPassword("")
-        }
-        else if(status === "error"){
-            window.alert(msg)
-            setUsername("")
-            setPassword("")
-        }
-        else{
-            setRegister(false)
-        }
-    }
-*/
     client.onmessage = (byteString) => {
         const { data } = byteString
         console.log(data)
@@ -79,33 +30,36 @@ const SignIn = ({client, username, password, setSignedIn, setUsername, setPasswo
                 console.log(status)
 
                 if(status === "not exist"){
-                    window.alert(msg)
+                    message.warning(msg, 2)
                     setUsername("")
                     setPassword("")
                 }
                 else if(status === "failed"){
-                    window.alert(msg)
+                    message.error(msg, 2)
                     setPassword("")
                 }
                 else{
+                    message.success(msg, 2)
                     setSignedIn(true)
                     setNowUser(username)
+                    navigate("/")
                 }
                 break
             }
             case "regist": {
                 const { msg, status } = payload[0]
                 if(status === "exist"){
-                    window.alert(msg)
+                    message.warning(msg)
                     setUsername("")
                     setPassword("")
                 }
                 else if(status === "error"){
-                    window.alert(msg)
+                    message.error(msg)
                     setUsername("")
                     setPassword("")
                 }
                 else{
+                    message.success(msg)
                     setRegister(false)
                 }
                 break
@@ -114,19 +68,28 @@ const SignIn = ({client, username, password, setSignedIn, setUsername, setPasswo
         }
     }
 
-    const sendData = async (data) => {
-        await client.send(JSON.stringify(data))
-    }
-
     const sendLogin = () => {
-        sendData(["login", [{ username, password }]])
+        if(username && password) sendData(["login", [{ username, password }]])
     }
 
-    const sendRegist = () => {
-        sendData(["regist", [{ username, password }]])
+    
+    const logout = () => {
+        setSignedIn(false)
+        setNowUser(null)
+        navigate("/login")
     }
 
+    const gotoRegist = () => {
+        setRegister(true)
+        navigate("/register")
+    }
+    const backToHome = () => {
+        setUsername("")
+        setPassword("")
+        navigate("/")
+    }
     return (
+        !nowUser ?
         <>
             <h1 className="login-title">歡迎各位VT豚</h1>
             <Form
@@ -184,11 +147,19 @@ const SignIn = ({client, username, password, setSignedIn, setUsername, setPasswo
                     </Button>
                     <div className="regis-word">
                         還沒有帳號?
-                        <span onClick={sendRegist}>註冊一個</span>
+                        <span onClick={gotoRegist}>註冊一個</span>
                     </div>
                     
                 </Form.Item>
-            </Form>
+            </Form>  
+        </> 
+        :
+        <>
+            <h1>你要登出嗎？</h1>
+            <div className="log-out-or-not-container">
+                <Button type="primary" className="log-out-or-not" onClick={logout}>是</Button>        
+                <Button type="primary" className="log-out-or-not" onClick={backToHome}>否</Button>  
+            </div>      
         </>
     )
 }

@@ -33,7 +33,7 @@ const parse = (html, type) => {
         })
     }
     
-
+    //console.log(results)
     return results
 }
 
