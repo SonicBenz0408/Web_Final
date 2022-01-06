@@ -49,6 +49,7 @@ const crawl = async (corps, name) => {
     const liveResults = parse(html, "live")
 
     url = ytPrefix + "channel/" + vtInfo[corps][name] + tempSuffix
+    // console.log(url)
     await page.goto(url)
     html = await page.content()
     const tempResults = parse(html, "temp")

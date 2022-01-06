@@ -7,6 +7,12 @@ import { sendData, sendStatus, initData, favorData } from "./wssConnect"
 import User from "./models/User"
 import bcrypt from "bcrypt"
 import crawl from "./crawler/crawler"
+import nameId from "./crawler/nameId.json"
+import { ConsoleMessage } from "puppeteer"
+import Vtuber from "./models/Vtuber"
+import Stream from "./models/Stream"
+import Upcoming from "./models/Upcoming"
+const { performance } = require('perf_hooks')
 
 dotenv.config()
 
@@ -36,10 +42,73 @@ const broadcastMessage = (data, status) => {
     })
 }
 
+const init_vtuber = async () => {
+    for (var key in nameId) {
+        for (var keykey in nameId[key]){
+            if (nameId[key].hasOwnProperty(keykey) && key === 'Hololive') {
+                // let output = await crawl(key, keykey);
+                // console.log(output);
+                const check = await Vtuber.find({name: keykey});
+                if(check.length !== 0){
+                    console.log(`${keykey} exists`);
+                }
+                else{
+                    const vtuber = new Vtuber({ 
+                        name: keykey, 
+                        id: nameId[key][keykey], 
+                        corp: key, 
+                        channel : 'https://www.youtube.com/channel/' + nameId[key][keykey]
+                    });
+                    await vtuber.save();
+                }
+            }
+        }
+    }
+};
+
+const crawl_str_ups = async() => {
+    await Stream.deleteMany({});
+    await Upcoming.deleteMany({});
+    for(var key in nameId.Hololive){
+        if(nameId.Hololive.hasOwnProperty(key)){
+            let output = await crawl('Hololive', key);
+            for(let i = 0; i < output[0].length; i++){
+                let stream = new Stream({
+                    corp: 'Hololive', 
+                    img: output[0][i].img, 
+                    url: output[0][i].addr,
+                    title: output[0][i].title,
+                    id: nameId.Hololive[key]});
+                await stream.save();
+            }
+            for(let i = 0; i < output[1].length; i++){
+                let upcoming = new Upcoming({
+                    corp: 'Hololive', 
+                    img: output[1][i].img, 
+                    url: output[1][i].addr,
+                    title: output[1][i].title,
+                    id: nameId.Hololive[key],
+                    time: output[1][i].time
+                });
+                await upcoming.save();
+            }
+        }
+        console.log(`finish ${key}`);
+    }
+    console.log("Done Hololive")
+}
+
 db.once("open", async () => {
     console.log("MongoDB connected")
-    //const output = await crawl("Hololive", "宝鐘マリン")
-    //console.log(output)
+    crawl_str_ups();
+    // const output = await crawl("彩虹社", "叶")
+    // console.log(output)
+    // var start = performance.now();
+    // crawl_str_ups();
+    // var end = performance.now();
+    // console.log(`Call to doSomething took ${end - start} milliseconds`)
+    setInterval(crawl_str_ups, 450000);
+
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
@@ -106,13 +175,21 @@ db.once("open", async () => {
                     const { username, id } = payload[0]
                     let  user = await User.findOne({username})
                     if( !user.favor.includes(id) ){
-                        // const new_favor = [...user.favor, id]
-                        // user = await User.findOneAndUpdate({username}, {favor: new_favor},{
-                        //     new: true
-                        // })
                         user.favor.push(id);
                         user.save();
-                        console.log("subscribe: ", user)
+                        console.log("here subscribe: ", user)
+                    }
+                    break
+                }
+                case "unsubscribe": {
+                    const { username, id } = payload[0]
+                    let  user = await User.findOne({username})
+                    if( !user.favor.includes(id) ){
+                        const index = user.favor.indexOf(id);
+                        if (index > -1) {
+                            user.favor.splice(index, 1);
+                        }
+                        user.favor.save();
                     }
                     break
                 }

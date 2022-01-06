@@ -69,7 +69,7 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
     }
 
     const sendLogin = () => {
-        if(username && password) sendData(["login", [{ username, password }]])
+        if(username && password) sendData(["login", [{ username, password }]]);
     }
 
     
