@@ -6,7 +6,6 @@ import dotenv from "dotenv-defaults"
 import { sendData, sendStatus, initData, favorData } from "./wssConnect"
 import User from "./models/User"
 import bcrypt from "bcrypt"
-import crawl from "./crawler/crawler"
 
 dotenv.config()
 
@@ -36,10 +35,8 @@ const broadcastMessage = (data, status) => {
     })
 }
 
-db.once("open", async () => {
+db.once("open", () => {
     console.log("MongoDB connected")
-    //const output = await crawl("Hololive", "宝鐘マリン")
-    //console.log(output)
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
@@ -106,12 +103,10 @@ db.once("open", async () => {
                     const { username, id } = payload[0]
                     let  user = await User.findOne({username})
                     if( !user.favor.includes(id) ){
-                        // const new_favor = [...user.favor, id]
-                        // user = await User.findOneAndUpdate({username}, {favor: new_favor},{
-                        //     new: true
-                        // })
-                        user.favor.push(id);
-                        user.save();
+                        const new_favor = [...user.favor, id]
+                        user = await User.findOneAndUpdate({username}, {favor: new_favor},{
+                            new: true
+                        })
                         console.log("subscribe: ", user)
                     }
                     break

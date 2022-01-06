@@ -1,6 +1,7 @@
 .login-title {
     color: white;
     font-size: 30px;
+    margin-bottom: 30px;
 }
 
 .login-form {
@@ -76,5 +77,19 @@
 }
 .regis-word > span:hover{
     color: #000;
+}
+
+.log-out-or-not-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.log-out-or-not {
+    width: 100px;
+    height: 30px;
+    margin: 0 30px 0 30px;
+    padding: 20px;
+    align-items: center;
+    line-height: 5px;
 }
 

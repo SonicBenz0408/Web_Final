@@ -106,12 +106,10 @@ db.once("open", async () => {
                     const { username, id } = payload[0]
                     let  user = await User.findOne({username})
                     if( !user.favor.includes(id) ){
-                        // const new_favor = [...user.favor, id]
-                        // user = await User.findOneAndUpdate({username}, {favor: new_favor},{
-                        //     new: true
-                        // })
-                        user.favor.push(id);
-                        user.save();
+                        const new_favor = [...user.favor, id]
+                        user = await User.findOneAndUpdate({username}, {favor: new_favor},{
+                            new: true
+                        })
                         console.log("subscribe: ", user)
                     }
                     break
