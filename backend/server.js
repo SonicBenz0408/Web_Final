@@ -6,7 +6,6 @@ import dotenv from "dotenv-defaults"
 import { sendData, sendStatus, initData, favorData } from "./wssConnect"
 import User from "./models/User"
 import bcrypt from "bcrypt"
-
 dotenv.config()
 
 if(!process.env.MONGO_URL){

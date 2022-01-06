@@ -57,7 +57,7 @@ const crawlNiji = async () => {
         var html = await page.content()
         var results = parseName(html)
         for(let j=0 ; j < (results.length) ; j++){
-            finalResults = await parseId(results[j], page)
+            let finalResults = await parseId(results[j], page)
             totalResults.push(finalResults)
         }
     }
@@ -112,7 +112,7 @@ const crawlHolo = async () => {
     for(let i=0 ; i < (totalUrl.length) ; i++){
         await page.goto(totalUrl[i])
         html = await page.content()
-        finalResults = await parseInfo(html)
+        let finalResults = await parseInfo(html)
         totalResults.push(finalResults)
     }
 
