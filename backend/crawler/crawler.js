@@ -28,7 +28,11 @@ const parse = (html, type) => {
             var addr = ytPrefix + $(link).find("#thumbnail").attr("href")
             var img = $(link).find("#img").attr("src")
             var title = $(link).find("#video-title").attr("title")
-            var time = $(link).find("#metadata-line span")[1].children[0].data.substring(7)
+            var time_link = $(link).find("#metadata-line span")
+            var time = time_link[1] ? 
+                time_link[1].children[0].data.substring(7):
+                time_link[0].children[0].data.substring(7)
+            console.log(time)
             results.push({addr: addr, img: img, title: title, time: time})
         })
     }

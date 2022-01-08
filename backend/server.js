@@ -69,33 +69,63 @@ const init_vtuber = async () => {
 const crawl_str_ups = async() => {
     await Stream.deleteMany({});
     await Upcoming.deleteMany({});
-    for(var key in nameId.Hololive){
-        if(nameId.Hololive.hasOwnProperty(key)){
-            let output = await crawl('Hololive', key);
-            for(let i = 0; i < output[0].length; i++){
-                let stream = new Stream({
-                    corp: 'Hololive', 
-                    img: output[0][i].img, 
-                    url: output[0][i].addr,
-                    title: output[0][i].title,
-                    id: nameId.Hololive[key]});
-                await stream.save();
+    for (var corp in nameId){
+        for(var key in nameId[corp]){
+            if(nameId[corp].hasOwnProperty(key)){
+                let output = await crawl(corp, key);
+                for(let i = 0; i < output[0].length; i++){
+                    let stream = new Stream({
+                        corp: corp, 
+                        img: output[0][i].img, 
+                        url: output[0][i].addr,
+                        title: output[0][i].title,
+                        id: nameId[corp][key]});
+                    await stream.save();
+                }
+                for(let i = 0; i < output[1].length; i++){
+                    let upcoming = new Upcoming({
+                        corp: corp, 
+                        img: output[1][i].img, 
+                        url: output[1][i].addr,
+                        title: output[1][i].title,
+                        id: nameId[corp][key],
+                        time: output[1][i].time
+                    });
+                    await upcoming.save();
+                }
             }
-            for(let i = 0; i < output[1].length; i++){
-                let upcoming = new Upcoming({
-                    corp: 'Hololive', 
-                    img: output[1][i].img, 
-                    url: output[1][i].addr,
-                    title: output[1][i].title,
-                    id: nameId.Hololive[key],
-                    time: output[1][i].time
-                });
-                await upcoming.save();
-            }
+            console.log(`finish ${key}`);
         }
-        console.log(`finish ${key}`);
+        console.log("Done Hololive");
+        break;
     }
-    console.log("Done Hololive")
+    // for(var key in nameId.Hololive){
+    //     if(nameId.Hololive.hasOwnProperty(key)){
+    //         let output = await crawl('Hololive', key);
+    //         for(let i = 0; i < output[0].length; i++){
+    //             let stream = new Stream({
+    //                 corp: 'Hololive', 
+    //                 img: output[0][i].img, 
+    //                 url: output[0][i].addr,
+    //                 title: output[0][i].title,
+    //                 id: nameId.Hololive[key]});
+    //             await stream.save();
+    //         }
+    //         for(let i = 0; i < output[1].length; i++){
+    //             let upcoming = new Upcoming({
+    //                 corp: 'Hololive', 
+    //                 img: output[1][i].img, 
+    //                 url: output[1][i].addr,
+    //                 title: output[1][i].title,
+    //                 id: nameId.Hololive[key],
+    //                 time: output[1][i].time
+    //             });
+    //             await upcoming.save();
+    //         }
+    //     }
+    //     console.log(`finish ${key}`);
+    // }
+    // console.log("Done Hololive")
 }
 
 db.once("open", async () => {
