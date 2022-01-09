@@ -76,7 +76,7 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
     const logout = () => {
         setSignedIn(false)
         setNowUser(null)
-        navigate("/login")
+        navigate("/")
     }
 
     const gotoRegist = () => {

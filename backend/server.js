@@ -100,14 +100,14 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    crawl_str_ups();
+    //crawl_str_ups();
     // const output = await crawl("彩虹社", "叶")
     // console.log(output)
     // var start = performance.now();
     // crawl_str_ups();
     // var end = performance.now();
     // console.log(`Call to doSomething took ${end - start} milliseconds`)
-    setInterval(crawl_str_ups, 450000);
+    //setInterval(crawl_str_ups, 450000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {

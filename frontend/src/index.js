@@ -6,6 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import "antd/dist/antd.css" ;
 import './Containers/signIn.css'
 import './Containers/regist.css'
+import "./Containers/topBar.css"
+import "./Containers/sideBar.css"
+import "./Containers/mainArea.css"
+import "./Containers/homePage.css"
 
 ReactDOM.render(
   <App />,

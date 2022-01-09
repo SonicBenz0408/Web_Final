@@ -52,6 +52,7 @@ const crawl = async (corps, name) => {
     // console.log(url)
     await page.goto(url)
     html = await page.content()
+    console.log(name)
     const tempResults = parse(html, "temp")
     
     await browser.close()
