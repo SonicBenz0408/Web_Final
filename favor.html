@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>favor</title>
+</head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    font-family: 'DotGothic16', sans-serif;
+}
+body,html{
+    width: 100%;
+    height: 100%;
+}
+.wrap{
+    width: 100%;
+    height: 100%;
+}
+.top{
+    width: 100%;
+    height: 75px;
+    background-color: rgb(0,111,185); 
+    position: fixed;
+    display: flex;
+    align-items: center;
+}
+
+.top > .logo{
+    height: 100%;
+    line-height: 75px;
+    display: flex;
+    justify-content: center;
+    transform: translateY(-3px);
+    padding-left: 15px;
+}
+.top > .logo > div{
+    color: #fff;
+    font-size: 35px;
+    font-weight: 700;
+    text-shadow: rgb(255, 154, 200) 2px 2px 2px;
+}
+.barlist{
+    width: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(54,54,54);
+    transition: .5s;
+}
+.barlist > a{
+    height: 80px;
+}
+.barlist > .group{
+    display: flex;
+    align-items: center;
+    height: 25px;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: .5s;
+}
+.barlist > .group:hover{
+    background-color: rgb(102, 102, 102);
+}
+.barlist > .group > a{
+    color: #fff;
+    text-decoration: none;
+    margin-left: 20px;
+}
+.barlist > .group > i{
+    width: 25px;
+    font-size: 25px;
+    color: #fff;
+}
+
+
+.youraccount{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    right: 25px;
+    /* top: 0; */
+}
+.youraccount label > i{
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    font-size: 30px;
+    text-align: center;
+    line-height: 60px;
+    transition: .5s;
+}
+.youraccount label > i:hover{
+    background-color: rgb(65, 145, 200);
+}
+.youraccount label > i:active{
+    background-color: rgb(161, 203, 231);
+}
+
+input[type = "checkbox"]{
+    display: none;
+}
+input:checked + .top > .youraccount > .account{
+    /* opacity: 1; */
+    transform: scale(1,1);
+}
+.account{
+    color: #ccc;
+    background-color: #333;
+    position: absolute;
+    right: 10px;
+    top: 75px;
+    border-radius: 5px;
+    padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* opacity: 0; */
+    transform-origin: 87% -20px;
+    transform: scale(0,0);
+    transition: .5s;
+}
+.account::before{
+    content: "";
+    position: absolute;
+    top: -40px;
+    right: 10px;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid #333;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+}
+.account > div{
+    font-weight: 700;
+}
+.out{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px 5px 0 0;
+    border-bottom: 3px solid black;
+    margin-top: 10px;
+    width: 100%;
+    transition: .8s;
+}
+.out:hover{
+    background-color: #888;
+}
+.out > i{
+    font-size: 20px;
+    padding-left: 10px;
+}
+.out > div{
+    width: 100%;
+    text-align: center;    
+}
+
+.down{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(18, 18, 18);
+    display: flex;
+}
+.mainarea{
+    box-sizing: border-box;
+    padding: 20px;
+    width: 100%;
+    margin-top: 75px;
+    overflow-y: scroll;
+}
+.mainarea::-webkit-scrollbar{
+    width: 10px;
+    /* background-color: rgb(187, 179, 179); */
+    border-radius: 10px;
+}
+.mainarea::-webkit-scrollbar-thumb{
+    background-color: rgb(107, 105, 105);
+    border-radius: 2px;
+}
+.down > div{
+    color: #fff;
+}
+.favor,.company{
+    display: flex;
+    box-sizing: border-box;
+    color: rgb(255, 154, 200);
+    width: 100%;
+    background-color: rgb(30, 30, 30);
+    border: 1px solid #fff;
+    padding: 10px 25px;
+    border-radius: 5px;
+}
+.favor > button{
+    cursor: pointer;
+    margin: 0 0 0 15px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #999;
+    font-size: 16px;
+    transition: .2s;
+}
+.favor > button:hover{
+    background-color: #aaa;
+}
+.favor > button:active{
+    background-color: #ccc;
+}
+.company{
+    margin: 20px 0 0 0;
+    border: none;
+}
+.company > span{
+            color: #fff;
+            background-color: rgb(244, 119, 166);
+            padding: 0px 8px;
+            margin-left: 8px;
+            border-radius: 8px;
+
+        }
+.zone{
+    padding: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.item{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 150px;
+    height: 200px;
+    border: 3px solid #fff;
+    border-radius: 10px;
+    margin: 15px;
+}
+.item > img{
+    box-sizing: border-box;
+    width: 70px;
+    height: 70px;
+}
+.zone > .item > div{
+    font-size: 20px;
+    color: #0af;
+    /* background-color: aqua; */
+}
+.item > label{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: rgb(244, 119, 166);
+    user-select: none;
+}
+label:hover > .add{
+    text-decoration: underline;
+}
+label > .add + .checkbox{
+    margin-left: 5px;
+    width: 15px;
+    height: 15px;
+    border: 5px solid #fff;
+    background-color: #fff;
+    border-radius: 10px;
+}
+input:checked + label > .add + .checkbox{
+    background-color: rgb(244, 119, 166);
+}
+
+
+</style>
+<script src="https://kit.fontawesome.com/f88beb68a5.js" crossorigin="anonymous"></script>
+<body>
+    <div class="wrap">
+
+        <input type="checkbox" id="youraccount">
+        <div class="top">
+            <div class="logo">
+                <div>VTDD</div>
+            </div>
+            <div class="youraccount">
+                <label for="youraccount">
+                    <i class="fas fa-user-circle"></i>
+                </label>
+                <div class="account">
+                    <div>Welcome!!&nbspDD</div>
+                    <div>Sonic_benz</div>
+                    <div class="out">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <div>登出</div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="down">
+            <nav class="barlist">
+                <a href="#"></a>
+                <div class="group">
+                    <i class="fas fa-home"></i>
+                    <a href="#">首頁</a>
+                </div>
+                <div class="group">
+                    <i class="fas fa-heart"></i>
+                    <a href="#">我的最愛</a>
+                </div>
+                <div class="group">
+                    <i class="fas fa-address-book"></i>
+                    <a href="#">所有頻道</a>
+                </div>
+            </nav>
+
+            <div class="mainarea">
+                <form action="" class="favor">
+                    <select name="" id="">
+                        <option value="">請選擇公司</option>
+                        <option value="">hololive</option>
+                        <option value="">彩虹社</option>
+                        <option value="">台V</option>
+                        <option value="">sonic_benz</option>
+                    </select>
+                    <button>儲存</button>
+                    <button>重置</button>
+                </form>
+
+                <div class="company">hololive<span>87</span></div>
+                <div class="zone">
+                    <div class="item">
+                        <input type="checkbox" name="" id="n1">
+                        <label for="n1">
+                            <div class="add">Add</div>
+                            <div class="checkbox"></div>
+                        </label>
+                        <img src="123.png" alt="">
+                        <div>sonic_benz</div>
+                    </div>
+
+                    <div class="item">
+                        <input type="checkbox" name="" id="n2">
+                        <label for="n2">
+                            <div class="add">Add</div>
+                            <div class="checkbox"></div>
+                        </label>
+                        <img src="123.png" alt="">
+                        <div>sonic_benz</div>
+                    </div>
+                    <div class="item">
+                        <input type="checkbox" name="" id="n3">
+                        <label for="n3">
+                            <div class="add">Add</div>
+                            <div class="checkbox"></div>
+                        </label>
+                        <img src="123.png" alt="">
+                        <div>sonic_benz</div>
+                    </div>
+                    <div class="item">
+                        <input type="checkbox" name="" id="n4">
+                        <label for="n4">
+                            <div class="add">Add</div>
+                            <div class="checkbox"></div>
+                        </label>
+                        <img src="123.png" alt="">
+                        <div>sonic_benz</div>
+                    </div>
+                </div>
+                
+                <div class="company">sonic_benz<span>1</span></div>
+                <div class="zone">
+                    <div class="item">
+                        <input type="checkbox" name="" id="n5">
+                        <label for="n5">
+                            <div class="add">Add</div>
+                            <div class="checkbox"></div>
+                        </label>
+                        <img src="123.png" alt="">
+                        <div>sonic_benz</div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+</body>
+</html>

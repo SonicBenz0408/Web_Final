@@ -8,7 +8,8 @@
 
   "scripts": {
     "start" : "cd frontend && yarn start",
-    "server" : "cd backend && yarn server"
+    "server" : "cd backend && yarn server",
+    "build" : "cd frontend && yarn build"
   }
 }
 

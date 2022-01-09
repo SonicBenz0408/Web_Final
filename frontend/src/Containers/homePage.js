@@ -1,13 +1,42 @@
 import { useState, useRef } from "react"
 import styled from "styled-components"
 import { BrowserRouter, NavLink, Switch, Route } from "react-router-dom"
+import TopBar from "./topBar"
+import SideBar from "./sideBar"
+import MainArea from "./mainArea"
 
-const Home = ({ nowUser }) => {
+const Wrapper = styled.div`
+    width: 100%;
+    height: 100%;
+`
+const DownWrapper = styled.div`
+    width: 100%;
+    height: 100%;
+    background-color: rgb(18, 18, 18);
+    display: flex;
+}
+`
+const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
 
+    const [favorList, setFavorList] = useState([])
+    const [liveList, setLiveList] = useState([])
+    const [upcomingList, setUpcomingList] = useState([])
+    
+    const Main = !nowUser ?
+        <div className="not-login">
+            <h1>Please login first!</h1> 
+        </div>
+        :
+        <MainArea menuKey={menuKey} liveList={liveList} upcomingList={upcomingList} favorList={favorList} setFavorList={setFavorList}/>
+    
     return (
-        !nowUser ? 
-        <h1><NavLink to="/login">LOGIN</NavLink></h1> :
-        <h1><NavLink to="/login">LOGIN COMPLETE</NavLink></h1>
+        <Wrapper>
+            <TopBar setMenuKey={setMenuKey} nowUser={nowUser} setNowUser={setNowUser} setSignedIn={setSignedIn} navigate={navigate} />
+            <DownWrapper>
+                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} setFavorList={setFavorList} navigate={navigate}/>
+                {Main}
+            </DownWrapper>
+        </Wrapper>
     )
 }
 

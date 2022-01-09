@@ -23,7 +23,9 @@ const VTools = () => {
     const [password, setPassword] = useState("")
     const [signedIn, setSignedIn] = useState(false)
     const [register, setRegister] = useState(false)
-    
+    const [menuKey, setMenuKey] = useState("Home")
+
+
     const navigate = useNavigate()
     
     const sendData = async (data) => {
@@ -45,7 +47,11 @@ const VTools = () => {
     />
 
     const homeScene = <Home
+        menuKey={menuKey}
+        setMenuKey={setMenuKey}
         nowUser={nowUser}
+        setNowUser={setNowUser}
+        navigate={navigate}
     />
     const registScene = <Regist
         client={client}
@@ -59,6 +65,7 @@ const VTools = () => {
         <Wrapper>
             <Routes>
                 <Route exact path="/" element={homeScene} />
+                <Route path="/home" element={homeScene} />
                 <Route path="/login" element={signInScene} />
                 <Route path="/register" element={registScene} />       
             </Routes>

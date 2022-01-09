@@ -102,7 +102,7 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    crawl_str_ups();
+    //crawl_str_ups();
     // const output = await crawl("彩虹社", "叶")
     // console.log(output)
     // var start = performance.now();
