@@ -27,7 +27,7 @@ const initData = async (ws) => {
             if(err) throw err
             init_data.upstream = res
             // console.log("init_data",init_data)
-            sendData(["init", init_data], ws)
+            sendData(["init", [{init_data}]], ws)
         })    
 }
 
@@ -54,7 +54,7 @@ const favorData = async (ws, filter) => {
             if(err) throw err
             favor_data.upstream = res
             // console.log("favor_data", favor_data)
-            sendData(["favor", favor_data], ws)
+            sendData(["favor", [{favor_data}]], ws)
         })
 
 }

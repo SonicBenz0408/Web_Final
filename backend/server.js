@@ -67,23 +67,24 @@ const init_vtuber = async () => {
 };
 
 const crawl_str_ups = async() => {
-    await Stream.deleteMany({});
-    await Upcoming.deleteMany({});
+    // await Stream.deleteMany({});
+    // await Upcoming.deleteMany({});
+    let output_stream = [];
+    let output_up = [];
     for (var corp in nameId){
         for(var key in nameId[corp]){
             if(nameId[corp].hasOwnProperty(key)){
                 let output = await crawl(corp, key);
                 for(let i = 0; i < output[0].length; i++){
-                    let stream = new Stream({
+                    output_stream.push({
                         corp: corp, 
                         img: output[0][i].img, 
                         url: output[0][i].addr,
                         title: output[0][i].title,
                         id: nameId[corp][key]});
-                    await stream.save();
                 }
                 for(let i = 0; i < output[1].length; i++){
-                    let upcoming = new Upcoming({
+                    output_up.push({
                         corp: corp, 
                         img: output[1][i].img, 
                         url: output[1][i].addr,
@@ -91,18 +92,46 @@ const crawl_str_ups = async() => {
                         id: nameId[corp][key],
                         time: output[1][i].time
                     });
-                    await upcoming.save();
                 }
             }
             console.log(`finish ${key}`);
         }
         console.log(`Done ${corp}`);
     }
+    var start = performance.now();
+
+    await Stream.deleteMany({});
+    await Upcoming.deleteMany({});
+    for(let i = 0; i < output_stream.length; i++){
+        let stream = new Stream({
+            corp: output_stream[i].corp,
+            img: output_stream[i].img, 
+            url: output_stream[i].url,
+            title: output_stream[i].title,
+            id: output_stream[i].id
+        });
+        await stream.save();
+    }
+
+    for(let i = 0; i < output_stream.length; i++){
+        let upstream = new Upcoming({
+            corp: output_up[i].corp,
+            img: output_up[i].img, 
+            url: output_up[i].url,
+            title: output_up[i].title,
+            id: output_up[i].id,
+            time: output_up[i].time
+        });
+        await upstream.save();
+    }
+    var end = performance.now();
+    console.log(`Call to doSomething took ${end - start} milliseconds`);
+
 }
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    //crawl_str_ups();
+    crawl_str_ups();
     // const output = await crawl("彩虹社", "叶")
     // console.log(output)
     // var start = performance.now();

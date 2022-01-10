@@ -52,6 +52,7 @@ const VTools = () => {
         nowUser={nowUser}
         setNowUser={setNowUser}
         navigate={navigate}
+        setSignedIn={setSignedIn}
     />
     const registScene = <Regist
         client={client}

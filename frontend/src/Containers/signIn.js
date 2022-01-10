@@ -68,8 +68,8 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
         }
     }
 
-    const sendLogin = () => {
-        if(username && password) sendData(["login", [{ username, password }]]);
+    const sendLogin = async () => {
+        if(username && password) await sendData(["login", [{ username, password }]]);
     }
 
     
