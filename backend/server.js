@@ -42,6 +42,13 @@ const broadcastMessage = (data, status) => {
     })
 }
 
+const broadcastStream = (upstream) => {
+    console.log("boardcast!!");
+    wss.clients.forEach(async (client) => {
+        sendData(["upstream", [{upstream}]], client);
+    })
+}
+
 const init_vtuber = async () => {
     for (var key in nameId) {
         for (var keykey in nameId[key]){
@@ -67,77 +74,64 @@ const init_vtuber = async () => {
 };
 
 const crawl_str_ups = async() => {
-    // await Stream.deleteMany({});
-    // await Upcoming.deleteMany({});
+    let upstream_data = {};
     let output_stream = [];
     let output_up = [];
     for (var corp in nameId){
+        if(corp != 'Hololive') break;
         for(var key in nameId[corp]){
+            upstream_data[key] = {live: [], upcoming: []};
             if(nameId[corp].hasOwnProperty(key)){
                 let output = await crawl(corp, key);
                 for(let i = 0; i < output[0].length; i++){
-                    output_stream.push({
+                    let tmp_stream = {
                         corp: corp, 
                         img: output[0][i].img, 
                         url: output[0][i].addr,
                         title: output[0][i].title,
-                        id: nameId[corp][key]});
+                        id: nameId[corp][key]
+                    };
+                    output_stream.push(tmp_stream);
+                    upstream_data[key].live.push(tmp_stream);
                 }
                 for(let i = 0; i < output[1].length; i++){
-                    output_up.push({
+                    let tmp_up = {
                         corp: corp, 
                         img: output[1][i].img, 
                         url: output[1][i].addr,
                         title: output[1][i].title,
                         id: nameId[corp][key],
                         time: output[1][i].time
-                    });
+                    };
+                    output_up.push(tmp_up);
+                    upstream_data[key].upcoming.push(tmp_up)
                 }
+                if(upstream_data[key].upcoming.length === 0 && upstream_data[key].live.length === 0)
+                    delete upstream_data[key];
             }
             console.log(`finish ${key}`);
         }
         console.log(`Done ${corp}`);
     }
-    var start = performance.now();
-
+    console.log(upstream_data);
+    broadcastStream(upstream_data);
     await Stream.deleteMany({});
     await Upcoming.deleteMany({});
     for(let i = 0; i < output_stream.length; i++){
-        let stream = new Stream({
-            corp: output_stream[i].corp,
-            img: output_stream[i].img, 
-            url: output_stream[i].url,
-            title: output_stream[i].title,
-            id: output_stream[i].id
-        });
+        let stream = new Stream(output_stream[i]);
         await stream.save();
     }
 
-    for(let i = 0; i < output_stream.length; i++){
-        let upstream = new Upcoming({
-            corp: output_up[i].corp,
-            img: output_up[i].img, 
-            url: output_up[i].url,
-            title: output_up[i].title,
-            id: output_up[i].id,
-            time: output_up[i].time
-        });
+    for(let i = 0; i < output_up.length; i++){
+        let upstream = new Upcoming(output_up[i]);
         await upstream.save();
     }
-    var end = performance.now();
-    console.log(`Call to doSomething took ${end - start} milliseconds`);
 
 }
 
 db.once("open", async () => {
     console.log("MongoDB connected")
     crawl_str_ups();
-    // const output = await crawl("彩虹社", "叶")
-    // console.log(output)
-    // var start = performance.now();
-    // crawl_str_ups();
-    // var end = performance.now();
-    // console.log(`Call to doSomething took ${end - start} milliseconds`)
     setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
@@ -146,7 +140,7 @@ db.once("open", async () => {
             const [task, payload] = JSON.parse(data)
             console.log(task, payload)
             switch (task) {
-                case "init": {
+                case "upstream": {
                     initData(ws)
                     break
                 }
@@ -235,3 +229,4 @@ db.once("open", async () => {
         console.log(`Listening on http://localhost:${PORT}`)
     })
 })
+
