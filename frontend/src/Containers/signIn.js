@@ -3,7 +3,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
 
 
-const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, setUsername, setPassword, setRegister, setNowUser, navigate}) => {
+const SignIn = ({client, username, password, nowUser, setMenuKey, sendData, setSignedIn, setUsername, setPassword, setRegister, setNowUser, navigate}) => {
     
     const onFinish = (values) => {
         console.log('Success:', values)
@@ -26,8 +26,6 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
         switch (task) {
             case "login": {
                 const { msg, status } = payload[0]
-                console.log(msg)
-                console.log(status)
 
                 if(status === "not exist"){
                     message.warning(msg, 2)
@@ -40,9 +38,13 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
                 }
                 else{
                     message.success(msg, 2)
+                    sendData(["favor", [{ username }]])
                     setSignedIn(true)
                     setNowUser(username)
+                    setMenuKey("home")
                     navigate("/")
+                    
+                    
                 }
                 break
             }
@@ -68,10 +70,10 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
         }
     }
 
+
     const sendLogin = async () => {
         if(username && password) await sendData(["login", [{ username, password }]]);
     }
-
     
     const logout = () => {
         setSignedIn(false)
