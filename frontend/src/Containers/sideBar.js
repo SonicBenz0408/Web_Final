@@ -12,10 +12,9 @@ const Wrapper = styled.div`
     transition: .5s;
     margin-top: 75px ;
     position: fixed ;
-}
 `
 
-const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {
+const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorTemp, navigate }) => {
     
     const handleMenuClick = (event) => {
         if(event.key === "favor") toFavor()
@@ -24,7 +23,7 @@ const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {
 
     const toNotFavor = (to) => {
         if (menuKey === "favor"){
-            setFavorList([])
+            setFavorTemp([])
         }
         setMenuKey(to)
         //navigate(`/home/${to}`)
@@ -46,13 +45,12 @@ const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {
     </> :
     <></>
 
-
     return (
         <Wrapper>
             <Menu
                 className="side-menu"
                 selectedKeys={[menuKey]}
-                defaultSelectedKeys={["Home"]}
+                defaultSelectedKeys={["home"]}
                 mode="inline"
                 theme="dark"    
             >

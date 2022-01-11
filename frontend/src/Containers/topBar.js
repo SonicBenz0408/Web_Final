@@ -10,6 +10,7 @@ const Wrapper = styled.div`
     position: fixed;
     display: flex;
     align-items: center;
+    z-index: 1;
 `
 
 const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
@@ -56,7 +57,7 @@ const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
             <div className="logo" onClick={toHome}>
                 <div>VTDD</div>
             </div>
-            <Dropdown overlay={menu} className="youraccount">
+            <Dropdown overlay={menu} trigger="click" className="youraccount">
                 <AccountCircleIcon className="user-icon" fontSize=""/>
             </Dropdown>
         </Wrapper>
