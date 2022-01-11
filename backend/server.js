@@ -3,7 +3,9 @@ import http from "http"
 import express from "express"
 import mongoose, { models } from "mongoose" 
 import dotenv from "dotenv-defaults"
-import { sendData, sendStatus, initData, favorData, iconData } from "./wssConnect"
+
+import { sendData, sendStatus, initData, iconData } from "./wssConnect"
+
 import User from "./models/User"
 import bcrypt from "bcrypt"
 import { crawl, crawlIcon } from "./crawler/crawler"
@@ -105,7 +107,6 @@ const crawl_str_ups = async() => {
     let output_stream = [];
     let output_up = [];
     for (var corp in nameId){
-        if(corp != 'Hololive') break;
         for(var key in nameId[corp]){
             upstream_data[key] = {live: [], upcoming: []};
             if(nameId[corp].hasOwnProperty(key)){
@@ -168,15 +169,19 @@ db.once("open", async () => {
             const [task, payload] = JSON.parse(data)
             console.log(payload)
             switch (task) {
+                //  to initialize homepage
                 case "upstream": {
                     initData(ws)
                     break
                 }
+                // frontend: sendData(['favor', [{username}]])
                 case "favor": {
-                    const {username} = payload
-                    const user = await User.findOne({ username })
-                    favorData(ws, user.favor)
-                    break
+                    const {username} = payload[0]
+                    const user = await User.findOne({ username });
+                    const favor = user.favor;
+                    // console.log(favor);
+                    sendData(["favor", [{favor}]], ws);
+                    break;
                 }
                 case "icon": {
                     iconData(ws)
@@ -227,28 +232,17 @@ db.once("open", async () => {
                     }
                     break
                 }
-                // subscribe channel
+                // frontend: sendData(['subscribe', [{ username, favor: ["沙花叉クロヱ", "宝鐘マリン"]}]]);
                 case "subscribe": {
-                    const { username, id } = payload[0]
-                    let  user = await User.findOne({username})
-                    if( !user.favor.includes(id) ){
-                        user.favor.push(id);
-                        user.save();
-                        console.log("here subscribe: ", user)
-                    }
-                    break
-                }
-                case "unsubscribe": {
-                    const { username, id } = payload[0]
-                    let  user = await User.findOne({username})
-                    if( !user.favor.includes(id) ){
-                        const index = user.favor.indexOf(id);
-                        if (index > -1) {
-                            user.favor.splice(index, 1);
-                        }
-                        user.favor.save();
-                    }
-                    break
+                    const { username, favor } = payload[0]
+                    await User.findOne({username})
+                    .exec( async (err, res) => {
+                        if (err) throw err;
+                        res.favor = favor;
+                        await res.save();
+                        console.log(res);
+                    });
+                    break;
                 }
                 default: break
             }
