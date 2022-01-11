@@ -126,12 +126,12 @@
 }
 
 .channel-name{
-    font-size: 20px;
+    font-size: 16px;
     color: #0af;
 }
-/*.invisible-input{
+.invisible-input{
     display: none;
-}*/
+}
 .info-check{
     display: flex;
     align-items: center;
@@ -160,4 +160,58 @@
 
 .invisible-input:checked + .info-check > .add + .checkbox{
     background-color: rgb(244, 119, 166);
+}
+
+
+.thumbnail {
+    box-sizing: border-box;
+    width: 300px;
+    height: 200px;
+}
+
+.text-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.stream-title {
+    font-size: 20px;
+    color: #ddd;
+    border-radius: 2px;
+    transition: .3s;
+}
+
+.stream-status {
+    color: #f00;
+    align-self: flex-start;
+    border: 1px solid #f00;
+    padding: 0 3px;
+    margin: 8px 0;
+}
+
+.channel-small {
+    cursor: pointer;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    color: #0af;
+}
+
+.channel-small-pic {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.channel-small-name {
+    color: #0af;
+    padding: 0 10px;
+    align-self: center;
+    text-decoration: none;
+}
+
+.channel-small-name:hover {
+    text-decoration: underline;
 }

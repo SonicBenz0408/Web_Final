@@ -16,7 +16,7 @@ const DownWrapper = styled.div`
     display: flex;
 }
 `
-const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavor, HoloIcon, NijiIcon, OtherIcon, LiveStream, UpcomingStream, setSignedIn, navigate }) => {
+const Home = ({ sendData, menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavor, HoloIcon, NijiIcon, OtherIcon, WholeIcon, LiveStream, UpcomingStream, setSignedIn, navigate }) => {
 
     const [favorTemp, setFavorTemp] = useState([])
         
@@ -26,7 +26,9 @@ const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavo
         </div>
         :
         <MainArea 
+            sendData={sendData}
             menuKey={menuKey}
+            nowUser={nowUser}
             userFavor={userFavor}
             setUserFavor={setUserFavor}
             favorTemp={favorTemp}
@@ -34,6 +36,7 @@ const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavo
             HoloIcon={HoloIcon}
             NijiIcon={NijiIcon}
             OtherIcon={OtherIcon}
+            WholeIcon={WholeIcon}
             LiveStream={LiveStream}
             UpcomingStream={UpcomingStream}
         />
@@ -42,7 +45,7 @@ const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavo
         <Wrapper>
             <TopBar setMenuKey={setMenuKey} nowUser={nowUser} setNowUser={setNowUser} setSignedIn={setSignedIn} navigate={navigate} />
             <DownWrapper>
-                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} setFavorTemp={setFavorTemp} navigate={navigate}/>
+                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} userFavor={userFavor} setFavorTemp={setFavorTemp} navigate={navigate}/>
                 {Main}
             </DownWrapper>
         </Wrapper>

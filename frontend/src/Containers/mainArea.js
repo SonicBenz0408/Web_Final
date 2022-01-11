@@ -1,6 +1,6 @@
 import { Route, Routes } from "react-router-dom"
 import styled from "styled-components"
-import { Dropdown, Menu, Select } from "antd"
+import { Dropdown, Menu, message, Select } from "antd"
 import { useState } from "react"
 import Checkbox from "antd/lib/checkbox/Checkbox"
 const { Option } = Select
@@ -21,6 +21,23 @@ const LiveWrapper = styled.div`
 const UpcomingWrapper = styled.div`
     padding: 5px 10px;
 `
+
+const StreamWrapper = styled.div`
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: .2s;
+    &:hover{
+        background-color: rgb(60,60,60);
+    }
+    &:active{
+        background-color: rgb(90, 90, 90);
+    }
+`
+
 
 const ControlWrapper = styled.div`
     display: flex;
@@ -45,7 +62,7 @@ const InfoWrapper = styled.div`
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    width: 150px;
+    width: 190px;
     height: 200px;
     border: 3px solid #fff;
     border-radius: 10px;
@@ -53,12 +70,13 @@ const InfoWrapper = styled.div`
 `
 
 
-const MainArea = ({ menuKey, userFavor, setUserFavor, favorTemp, setFavorTemp, HoloIcon, NijiIcon, OtherIcon, liveList, upcomingList }) => {
+
+
+const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTemp, setFavorTemp, HoloIcon, NijiIcon, OtherIcon, WholeIcon, LiveStream, UpcomingStream }) => {
     const [favorChoose, setFavorChoose] = useState("請選擇公司")
 
     const handleChange = (value) => {
         setFavorChoose(value)
-        console.log(favorChoose)
     }
     const changeTemp = (value) => {
         let index = favorTemp.indexOf(value)
@@ -71,21 +89,45 @@ const MainArea = ({ menuKey, userFavor, setUserFavor, favorTemp, setFavorTemp, H
     }
     const handleTempChange = (event) => {
         changeTemp(event.target.value)
-        console.log(favorTemp)
     }
 
+    const favorSave = async () => {
+        if(favorTemp.length === userFavor.length){
+            let arrayA = favorTemp.sort()
+            let arrayB = userFavor.sort()
+            let same = true
+            for(let i=0 ; i < arrayA.length ; i++){
+                if(arrayA[i] !== arrayB[i]){
+                    same = false
+                    break
+                }
+            }
+            if(same){
+                message.warning("並未修改!", 1)
+                return
+            }
+        }
+        await sendData(["subscribe", [{ username: nowUser, favor: favorTemp }]])
+        setUserFavor(favorTemp)
+        message.success("儲存成功!", 1)
+        
+    }
+
+    const favorReset = () => {
+        setFavorTemp(userFavor)
+        message.success("重置完成!", 1)
+    }
     const aimIcon = (favorChoose === "Hololive") ? HoloIcon
         : (favorChoose === "彩虹社") ? NijiIcon
         : (favorChoose === "其他") ? OtherIcon
         : []
 
-    console.log(aimIcon)
     const favorScene = (favorChoose !== "請選擇公司") ? 
     <>
         <div className="company-title">{favorChoose}<span>87</span></div>
         {aimIcon.map((icon) => 
             <InfoWrapper>
-                <input className="invisible-input" type="checkbox" value={Object.keys(icon)[0]} id={Object.keys(icon)[0]} onChange={handleTempChange}/>
+                <input className="invisible-input" type="checkbox" value={Object.keys(icon)[0]} id={Object.keys(icon)[0]} checked={favorTemp.find(e => e === Object.keys(icon)[0]) !== undefined} onChange={handleTempChange}/>
                 <label className="info-check" htmlFor={Object.keys(icon)[0]}>
                     <div className="add">Add</div>
                     <div className="checkbox"></div>
@@ -96,27 +138,42 @@ const MainArea = ({ menuKey, userFavor, setUserFavor, favorTemp, setFavorTemp, H
                 <div className="channel-name">{Object.keys(icon)[0]}</div>
             </InfoWrapper>)}
     </> : <></>
-/*
-<div className="info-control">
-    <div className="add">Add</div>
-    <Checkbox
-        className="info-checkbox"
-        value={Object.keys(icon)[0]}
-        defaultChecked={userFavor.find(element => element === Object.keys(icon)[0])}
-        onChange={handleTempChange}
-    >
-    </Checkbox>
-</div>
-*/
+
     const home = 
     <>
-        <div className="main-title">直播中<span>6</span></div>
+        <div className="main-title">直播中<span>{LiveStream.length}</span></div>
         <LiveWrapper>
-
+            {LiveStream.map((stream) => 
+                <a target="_blank" href={stream[0].url}><StreamWrapper>
+                    {console.log(stream)}
+                    <img className="thumbnail" src={stream[0].img} alt="" />
+                    <div className="text-part">
+                        <div class="stream-title">{stream[0].title}</div>
+                        <div class="stream-status">直播中</div>
+                        <div class="channel-small">
+                            <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
+                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">sonic_benz</a>
+                        </div>
+                    </div>
+                </StreamWrapper></a>
+            )}
         </LiveWrapper>
-        <div className="main-title">即將開始<span>30</span></div>
+        <div className="main-title">即將開始<span>{UpcomingStream.length}</span></div>
         <UpcomingWrapper>
-
+            {UpcomingStream.map((stream) => 
+                <a href={stream[0].url}><StreamWrapper>
+                    {console.log(stream)}
+                    <img className="thumbnail" src={stream[0].img} alt="" />
+                    <div className="text-part">
+                        <div class="stream-title">{stream[0].title}</div>
+                        <div class="stream-status">即將開始</div>
+                        <div class="channel-small">
+                            <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
+                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">sonic_benz</a>
+                        </div>
+                    </div>
+                </StreamWrapper></a>
+            )}  
         </UpcomingWrapper>
     </>
 
@@ -129,8 +186,8 @@ const MainArea = ({ menuKey, userFavor, setUserFavor, favorTemp, setFavorTemp, H
                 <Option value="其他">其他</Option>
             </Select>
 
-            <button className="favor-button">儲存</button>
-            <button className="favor-button">重置</button>
+            <button className="favor-button" onClick={favorSave}>儲存</button>
+            <button className="favor-button" onClick={favorReset}>重置</button>
         </ControlWrapper>
         <ChannelWrapper>
             {favorScene}

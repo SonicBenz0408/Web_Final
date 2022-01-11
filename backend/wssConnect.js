@@ -50,14 +50,13 @@ const initData = async (ws) => {
 
 const iconData = async (ws) => {
 
-    console.log("iconData")
     var allData = { "Hololive": [], "彩虹社": [], "其他": [] }
 
     var dbHoloIcon = await Icon.find({'corp': "Hololive"}, "-_id -__v")
     
     for(let i=0 ; i < dbHoloIcon.length ; i++){
         let name = {}
-        name[dbHoloIcon[i]["name"]] = [dbHoloIcon[i]["icon"], dbHoloIcon[i]["url"]]
+        name[dbHoloIcon[i]["name"]] = [dbHoloIcon[i]["icon"], dbHoloIcon[i]["url"], dbHoloIcon[i]["corp"]]
         allData["Hololive"].push(name)
     }
 
@@ -65,7 +64,7 @@ const iconData = async (ws) => {
     
     for(let i=0 ; i < dbHoloIcon.length ; i++){
         let name = {}
-        name[dbNijiIcon[i]["name"]] = [dbNijiIcon[i]["icon"], dbNijiIcon[i]["url"]]
+        name[dbNijiIcon[i]["name"]] = [dbNijiIcon[i]["icon"], dbNijiIcon[i]["url"], dbNijiIcon[i]["corp"]]
         allData["彩虹社"].push(name)
     }
 
@@ -73,7 +72,7 @@ const iconData = async (ws) => {
     
     for(let i=0 ; i < dbOtherIcon.length ; i++){
         let name = {}
-        name[dbOtherIcon[i]["name"]] = [dbOtherIcon[i]["icon"], dbOtherIcon[i]["url"]]
+        name[dbOtherIcon[i]["name"]] = [dbOtherIcon[i]["icon"], dbOtherIcon[i]["url"], dbNijiIcon[i]["corp"]]
         allData["其他"].push(name)
     }
 

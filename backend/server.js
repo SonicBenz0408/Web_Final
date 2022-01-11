@@ -167,6 +167,7 @@ db.once("open", async () => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
             const [task, payload] = JSON.parse(data)
+            console.log("task: " + task)
             console.log(payload)
             switch (task) {
                 //  to initialize homepage
@@ -176,11 +177,12 @@ db.once("open", async () => {
                 }
                 // frontend: sendData(['favor', [{username}]])
                 case "favor": {
+                    
                     const {username} = payload[0]
                     const user = await User.findOne({ username });
                     const favor = user.favor;
-                    // console.log(favor);
-                    sendData(["favor", [{favor}]], ws);
+                    console.log(favor);
+                    sendData(["favor", [{favor: favor}]], ws);
                     break;
                 }
                 case "icon": {
@@ -198,7 +200,7 @@ db.once("open", async () => {
                         console.log(userHash)
                         const check = await bcrypt.compare(password, userHash[0].hash)
                         if(check){
-                            sendData([ "login", [{ msg: "Login successfully!", status: "success"}]], ws)
+                            sendData([ "login", [{ msg: "Login successfully!", status: "success", loginUser: username }]], ws)
                             console.log(`${username} logs in!`)
                         }
                         else{

@@ -14,7 +14,7 @@ const Wrapper = styled.div`
     position: fixed ;
 `
 
-const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorTemp, navigate }) => {
+const SideBar = ({ nowUser, menuKey, setMenuKey, userFavor, setFavorTemp, navigate }) => {
     
     const handleMenuClick = (event) => {
         if(event.key === "favor") toFavor()
@@ -23,7 +23,7 @@ const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorTemp, navigate }) => {
 
     const toNotFavor = (to) => {
         if (menuKey === "favor"){
-            setFavorTemp([])
+            setFavorTemp(userFavor)
         }
         setMenuKey(to)
         //navigate(`/home/${to}`)
