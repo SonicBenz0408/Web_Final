@@ -3,15 +3,16 @@ import http from "http"
 import express from "express"
 import mongoose, { models } from "mongoose" 
 import dotenv from "dotenv-defaults"
-import { sendData, sendStatus, initData, favorData } from "./wssConnect"
+import { sendData, sendStatus, initData, favorData, iconData } from "./wssConnect"
 import User from "./models/User"
 import bcrypt from "bcrypt"
-import crawl from "./crawler/crawler"
+import { crawl, crawlIcon } from "./crawler/crawler"
 import nameId from "./crawler/nameId.json"
 import { ConsoleMessage } from "puppeteer"
 import Vtuber from "./models/Vtuber"
 import Stream from "./models/Stream"
 import Upcoming from "./models/Upcoming"
+import Icon from "./models/Icon"
 const { performance } = require('perf_hooks')
 
 dotenv.config()
@@ -39,6 +40,13 @@ const broadcastMessage = (data, status) => {
         console.log("status", status)
         sendData(data, client)
         sendStatus(status, client)
+    })
+}
+
+const broadcastIcon = (icon) => {
+    console.log("boardcastIcon!!");
+    wss.clients.forEach(async (client) => {
+        sendData(["icon", [{ icon }]], client);
     })
 }
 
@@ -72,6 +80,25 @@ const init_vtuber = async () => {
         }
     }
 };
+
+const crawlAllIcon = async () => {
+    let allIcon = []
+    for (var corp in nameId){
+        for(var key in nameId[corp]){
+            let output = await crawlIcon(corp, key)
+            allIcon.push(output)
+        }
+    }
+
+    await Icon.deleteMany({})
+
+    for(let i = 0; i < allIcon.length; i++){
+        let icon = new Icon(allIcon[i])
+        await icon.save()
+    }
+
+    // broadcastIcon(allIcon)
+}
 
 const crawl_str_ups = async() => {
     let upstream_data = {};
@@ -131,23 +158,28 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    crawl_str_ups();
-    setInterval(crawl_str_ups, 1800000);
+    //crawlAllIcon();
+    //crawl_str_ups();
+    //setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
             const [task, payload] = JSON.parse(data)
-            console.log(task, payload)
+            console.log(payload)
             switch (task) {
                 case "upstream": {
                     initData(ws)
                     break
                 }
                 case "favor": {
-                    const {username} = payload[0]
+                    const {username} = payload
                     const user = await User.findOne({ username })
                     favorData(ws, user.favor)
+                    break
+                }
+                case "icon": {
+                    iconData(ws)
                     break
                 }
                 case "login": {

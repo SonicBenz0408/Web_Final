@@ -58,26 +58,37 @@ const MainArea = ({ menuKey, userFavor, setUserFavor, favorTemp, setFavorTemp, H
 
     const handleChange = (value) => {
         setFavorChoose(value)
+        console.log(favorChoose)
     }
-    const handleTempChange = (value) => {
-        setFavorTemp([...favorTemp, value])
+    const changeTemp = (value) => {
+        let index = favorTemp.indexOf(value)
+        if(index > -1){
+            setFavorTemp([...favorTemp.slice(0, index), ...favorTemp.slice(index+1, favorTemp.length)])
+        }
+        else{
+            setFavorTemp([...favorTemp, value])
+        }
+    }
+    const handleTempChange = (event) => {
+        changeTemp(event.target.value)
+        console.log(favorTemp)
     }
 
     const aimIcon = (favorChoose === "Hololive") ? HoloIcon
         : (favorChoose === "彩虹社") ? NijiIcon
         : (favorChoose === "其他") ? OtherIcon
         : []
-        
+
+    console.log(aimIcon)
     const favorScene = (favorChoose !== "請選擇公司") ? 
     <>
         <div className="company-title">{favorChoose}<span>87</span></div>
-        {console.log(aimIcon)}
         {aimIcon.map((icon) => 
             <InfoWrapper>
-                <input className="invisible-input" type="checkbox" value={Object.keys(icon)[0]} checked={favorTemp.find(element => element === Object.keys(icon)[0])} id={Object.keys(icon)[0]} />
-                <label className="info-check" for={Object.keys(icon)[0]}>
-                    <div class="add">Add</div>
-                    <div class="checkbox"></div>
+                <input className="invisible-input" type="checkbox" value={Object.keys(icon)[0]} id={Object.keys(icon)[0]} onChange={handleTempChange}/>
+                <label className="info-check" htmlFor={Object.keys(icon)[0]}>
+                    <div className="add">Add</div>
+                    <div className="checkbox"></div>
                 </label>
                 <a target="_blank" href={Object.values(icon)[0][1]}>
                     <img className="icon" src={Object.values(icon)[0][0]}/>

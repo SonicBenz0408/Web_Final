@@ -129,9 +129,9 @@
     font-size: 20px;
     color: #0af;
 }
-.invisible-input{
+/*.invisible-input{
     display: none;
-}
+}*/
 .info-check{
     display: flex;
     align-items: center;

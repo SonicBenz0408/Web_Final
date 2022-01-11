@@ -17,12 +17,9 @@ const SignIn = ({client, username, password, nowUser, setMenuKey, sendData, setS
 		func(event.target.value);
 	}
 
-    client.onmessage = (byteString) => {
+    client.onmessage = async (byteString) => {
         const { data } = byteString
-        console.log(data)
         const [task, payload] = JSON.parse(data)
-        console.log(task)
-        console.log(payload)
         switch (task) {
             case "login": {
                 const { msg, status } = payload[0]
@@ -38,7 +35,7 @@ const SignIn = ({client, username, password, nowUser, setMenuKey, sendData, setS
                 }
                 else{
                     message.success(msg, 2)
-                    sendData(["favor", [{ username }]])
+                    await sendData(["favor", [{ username }]])
                     setSignedIn(true)
                     setNowUser(username)
                     setMenuKey("home")

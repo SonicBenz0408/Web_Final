@@ -16,13 +16,10 @@ const DownWrapper = styled.div`
     display: flex;
 }
 `
-const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavor, HoloIcon, NijiIcon, OtherIcon, setSignedIn, navigate }) => {
+const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavor, HoloIcon, NijiIcon, OtherIcon, LiveStream, UpcomingStream, setSignedIn, navigate }) => {
 
     const [favorTemp, setFavorTemp] = useState([])
-
-    const [liveList, setLiveList] = useState([])
-    const [upcomingList, setUpcomingList] = useState([])
-    
+        
     const Main = !nowUser ?
         <div className="not-login">
             <h1>Please login first!</h1> 
@@ -37,8 +34,8 @@ const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavo
             HoloIcon={HoloIcon}
             NijiIcon={NijiIcon}
             OtherIcon={OtherIcon}
-            liveList={liveList}
-            upcomingList={upcomingList}
+            LiveStream={LiveStream}
+            UpcomingStream={UpcomingStream}
         />
     
     return (

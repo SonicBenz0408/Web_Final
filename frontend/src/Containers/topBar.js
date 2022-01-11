@@ -45,13 +45,13 @@ const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
         hasLoginMenu
         :
         loginMenu)
-        
+    
     const menu = (
         <Menu className="user-menu">
             {submenu}
         </Menu>
     )
-
+    
     return(
         <Wrapper>
             <div className="logo" onClick={toHome}>

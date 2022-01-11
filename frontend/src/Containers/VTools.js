@@ -1,4 +1,4 @@
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import styled from "styled-components"
 import SignIn from "./signIn"
 import { NavLink, Routes, Route, useNavigate } from "react-router-dom"
@@ -16,7 +16,40 @@ const Wrapper = styled.div`
 
 const VTools = () => {
 
-    const client = new WebSocket("ws://localhost:4000")
+    const ws = useRef(null) 
+
+    useEffect(() => {
+        ws.current = new WebSocket("ws://localhost:4000")
+        ws.current.onopen = async () => {
+            console.log("connected")
+            await sendData(["icon", {}])
+            console.log("initialization over")
+        }
+
+        ws.current.onmessage = (byteString) => {
+            const { data } = byteString
+            const [task, payload] = JSON.parse(data)
+            console.log(payload)
+            switch (task) {
+                case "icon": {
+                    setHoloIcon(payload[0]["Hololive"])
+                    setNijiIcon(payload[0]["彩虹社"])
+                    setOtherIcon(payload[0]["其他"])
+                    console.log("icon update")
+                }
+                case "upstream": {
+                    setStream(payload)
+                    updateFavorStream()
+                }
+                case "favor": {
+                    setUserFavor(payload)
+                    //sendData(["upstream", {}])
+                }
+    
+                default: break
+            }
+        }
+    }, [])
 
     const [nowUser, setNowUser] = useState(null)
     const [username, setUsername] = useState("")
@@ -24,7 +57,8 @@ const VTools = () => {
     const [signedIn, setSignedIn] = useState(false)
     const [register, setRegister] = useState(false)
     const [menuKey, setMenuKey] = useState("home")
-    
+    const [init, setInit] = useState(false)
+
     const [userFavor, setUserFavor] = useState([])
 
     const [HoloIcon, setHoloIcon] = useState([
@@ -34,41 +68,43 @@ const VTools = () => {
     const [NijiIcon, setNijiIcon] = useState([{"月ノ美兎": ["https://yt3.ggpht.com/ytc/AKedOLSGyQadwaaYuZy1zy33pdrj0yQLP_WVQziEbUwOJg=s88-c-k-c0x00ffffff-no-rj", "https://www.youtube.com/channel/UCD-miitqNY3nyukJ4Fnf4_A"]}])
     const [OtherIcon, setOtherIcon] = useState([{"kson ONAIR": ["https://yt3.ggpht.com/dJpEqyfOP0apT4ra7q_X1PBkRDryWkpqzGxOpcrVFIc9vumapjqgOPDJwyexmjDIupQd5BBllsw=s88-c-k-c0x00ffffff-no-rj", "https://www.youtube.com/channel/UC9ruVYPv7yJmV0Rh0NKA-Lw"]}])
 
-    const [HoloStream, setHoloStream] = useState([])
-    const [NijiStream, setNijiStream] = useState([])
-    const [OtherStream, setOtherStream] = useState([])
+    const [Stream, setStream] = useState([])
+    const [LiveStream, setLiveStream] = useState([])
+    const [UpcomingStream, setUpcomingStream] = useState([])
+
+
+    
 
     const navigate = useNavigate()
     
     const sendData = async (data) => {
-        await client.send(JSON.stringify(data))
+        console.log(data)
+        await ws.current.send(JSON.stringify(data))
     }
     
-    client.onmessage = (byteString) => {
-        const { data } = byteString
-        const [task, payload] = JSON.parse(data)
-
-        switch (task) {
-            case "icon": {
-                setHoloIcon([])
-                setNijiIcon([])
-                setOtherIcon([])
+    const updateFavorStream = () => {
+        const nameList = Object.keys(Stream)
+        const tempLive = []
+        const tempUpcoming = []
+        nameList.forEach(element => {
+            if(userFavor.find(e => e === element)){
+                Stream[element].live.forEach(n => {
+                    n["name"] = element
+                })
+                tempLive = [...tempLive, Stream[element].live]
+                Stream[element].upcoming.forEach(n => {
+                    n["name"] = element
+                })
+                tempUpcoming = [...tempUpcoming, Stream[element].upcoming]
             }
-            case "upstream": {
-                setHoloStream([])
-                setNijiStream([])
-                setOtherStream([])
-            }
-            case "favor": {
-                setUserFavor(payload)
-            }
-
-            default: break
-        }
+        })
+        
+        setLiveStream(tempLive)
+        setUpcomingStream(tempUpcoming)
     }
 
     const signInScene = <SignIn
-        client={client}
+        client={ws.current}
         username={username}
         password={password}
         nowUser={nowUser}
@@ -94,11 +130,13 @@ const VTools = () => {
         HoloIcon={HoloIcon}
         NijiIcon={NijiIcon}
         OtherIcon={OtherIcon}
+        LiveStream={LiveStream}
+        UpcomingStream={UpcomingStream}
         navigate={navigate}
         setSignedIn={setSignedIn}
     />
     const registScene = <Regist
-        client={client}
+        client={ws.current}
         sendData={sendData}
         setUsername={setUsername}
         setRegister={setRegister}
