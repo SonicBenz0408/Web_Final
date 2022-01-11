@@ -152,7 +152,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                         <div class="stream-status">直播中</div>
                         <div class="channel-small">
                             <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
-                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">sonic_benz</a>
+                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
                     </div>
                 </StreamWrapper></a>
@@ -169,7 +169,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                         <div class="stream-status">即將開始</div>
                         <div class="channel-small">
                             <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
-                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">sonic_benz</a>
+                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
                     </div>
                 </StreamWrapper></a>

@@ -30,6 +30,7 @@ const SideBar = ({ nowUser, menuKey, setMenuKey, userFavor, setFavorTemp, naviga
     }
     const toFavor = () => {
         setMenuKey("favor")
+        setFavorTemp(userFavor)
         //navigate("/home/favor")
     } 
 

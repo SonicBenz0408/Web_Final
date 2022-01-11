@@ -159,8 +159,8 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    //crawlAllIcon();
-    //crawl_str_ups();
+    crawlAllIcon();
+    crawl_str_ups();
     //setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
