@@ -70,10 +70,9 @@ const SignIn = ({client, username, password, nowUser, setMenuKey, sendData, setS
         }
     }
 
-    const sendLogin = () => {
-        if(username && password){
-            sendData(["login", [{ username, password }]]);    
-        }
+
+    const sendLogin = async () => {
+        if(username && password) await sendData(["login", [{ username, password }]]);
     }
     
     const logout = () => {

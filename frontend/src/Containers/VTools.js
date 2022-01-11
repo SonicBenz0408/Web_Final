@@ -95,6 +95,7 @@ const VTools = () => {
         NijiIcon={NijiIcon}
         OtherIcon={OtherIcon}
         navigate={navigate}
+        setSignedIn={setSignedIn}
     />
     const registScene = <Regist
         client={client}
