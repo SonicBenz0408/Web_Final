@@ -1,6 +1,6 @@
-import { useState, useRef } from "react"
+import { useState } from "react"
 import styled from "styled-components"
-import { BrowserRouter, NavLink, Switch, Route } from "react-router-dom"
+//import { BrowserRouter, NavLink, Switch, Route } from "react-router-dom"
 import TopBar from "./topBar"
 import SideBar from "./sideBar"
 import MainArea from "./mainArea"
@@ -16,24 +16,36 @@ const DownWrapper = styled.div`
     display: flex;
 }
 `
-const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
+const Home = ({ sendData, menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavor, HoloIcon, NijiIcon, OtherIcon, WholeIcon, LiveStream, UpcomingStream, setSignedIn, navigate }) => {
 
-    const [favorList, setFavorList] = useState([])
-    const [liveList, setLiveList] = useState([])
-    const [upcomingList, setUpcomingList] = useState([])
-    
+    const [favorTemp, setFavorTemp] = useState([])
+        
     const Main = !nowUser ?
         <div className="not-login">
             <h1>Please login first!</h1>
         </div>
         :
-        <MainArea menuKey={menuKey} liveList={liveList} upcomingList={upcomingList} favorList={favorList} setFavorList={setFavorList}/>
+        <MainArea 
+            sendData={sendData}
+            menuKey={menuKey}
+            nowUser={nowUser}
+            userFavor={userFavor}
+            setUserFavor={setUserFavor}
+            favorTemp={favorTemp}
+            setFavorTemp={setFavorTemp}
+            HoloIcon={HoloIcon}
+            NijiIcon={NijiIcon}
+            OtherIcon={OtherIcon}
+            WholeIcon={WholeIcon}
+            LiveStream={LiveStream}
+            UpcomingStream={UpcomingStream}
+        />
     
     return (
         <Wrapper>
             <TopBar setMenuKey={setMenuKey} nowUser={nowUser} setNowUser={setNowUser} setSignedIn={setSignedIn} navigate={navigate} />
             <DownWrapper>
-                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} setFavorList={setFavorList} navigate={navigate}/>
+                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} userFavor={userFavor} setFavorTemp={setFavorTemp} navigate={navigate}/>
                 {Main}
             </DownWrapper>
         </Wrapper>

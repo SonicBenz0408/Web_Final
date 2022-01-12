@@ -41,6 +41,15 @@ const parse = (html, type) => {
     return results
 }
 
+const parseIcon = (html) => {
+    const $ = cheerio.load(html)
+
+    const data = $("#avatar img")
+    const result = $(data[0]).attr("src")
+
+    return result
+}
+
 const crawl = async (corps, name) => {
     const browser = await puppeteer.launch({
         args: ["--no-sandbox"],
@@ -64,4 +73,25 @@ const crawl = async (corps, name) => {
     return [liveResults, tempResults]
 }
 
-export default crawl
+const crawlIcon = async (corps, name) => {
+    const browser = await puppeteer.launch({
+        args: ["--no-sandbox"],
+        headless: true
+    })
+    const page = await browser.newPage()
+    var url = ytPrefix + "channel/" + vtInfo[corps][name] + liveSuffix
+    await page.goto(url, {timeout:0})
+    var html = await page.content()
+    const img = parseIcon(html)
+    console.log("finish " + name)
+    const output = { 
+        "name": name,
+        "corp": corps,
+        "icon": img, 
+        "url": url
+    }
+    console.log(output)
+    return output
+}
+
+export { crawl, crawlIcon }

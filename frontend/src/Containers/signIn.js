@@ -1,10 +1,14 @@
-import { Form, Input, Button, Checkbox, message } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
+import { useState } from "react";
 
 
-const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, setUsername, setPassword, setRegister, setNowUser, navigate}) => {
+const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUsername, setPassword,/* setRegister,*/ setNowUser, navigate}) => {
     
+    const [keep, setKeep] = useState(false)
+    const [keepUsername, setKeepUsername] = useState("")
+
     const onFinish = (values) => {
         console.log('Success:', values)
     }
@@ -17,70 +21,24 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
 		func(event.target.value);
 	}
 
-    client.onmessage = (byteString) => {
-        const { data } = byteString
-        console.log(data)
-        const [task, payload] = JSON.parse(data)
-        console.log(task)
-        console.log(payload)
-        switch (task) {
-            case "login": {
-                const { msg, status } = payload[0]
-                console.log(msg)
-                console.log(status)
-
-                if(status === "not exist"){
-                    message.warning(msg, 2)
-                    setUsername("")
-                    setPassword("")
-                }
-                else if(status === "failed"){
-                    message.error(msg, 2)
-                    setPassword("")
-                }
-                else{
-                    message.success(msg, 2)
-                    setSignedIn(true)
-                    setNowUser(username)
-                    navigate("/")
-                }
-                break
-            }
-            case "regist": {
-                const { msg, status } = payload[0]
-                if(status === "exist"){
-                    message.warning(msg)
-                    setUsername("")
-                    setPassword("")
-                }
-                else if(status === "error"){
-                    message.error(msg)
-                    setUsername("")
-                    setPassword("")
-                }
-                else{
-                    message.success(msg)
-                    setRegister(false)
-                }
-                break
-            }
-            default: break
+    const handleKeep = (func) => (event) => {
+        func(event.target.checked)
+    }
+    const sendLogin = async () => {
+        if(username && password){
+            await sendData(["login", [{ username, password }]]);
+            if(keep) setKeepUsername(username)
         }
     }
 
-    const sendLogin = async () => {
-        if(username && password) await sendData(["login", [{ username, password }]]);
-    }
-
-    
     const logout = () => {
-        setSignedIn(false)
+        //setSignedIn(false)
         setNowUser(null)
         navigate("/")
     }
 
     const gotoRegist = () => {
-        setRegister(true)
+        //setRegister(true)
         navigate("/register")
     }
     const backToHome = () => {
@@ -115,7 +73,7 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
                     ]}
                     noStyle={false}
                 >
-                    <Input prefix={<UserOutlined/>} value={username} placeholder="帳號" className="form-input" onChange={handleChange(setUsername)}/>
+                    <Input prefix={<UserOutlined/>} defaultValue={keepUsername} value={username} placeholder="帳號" className="form-input" onChange={handleChange(setUsername)}/>
                 </Form.Item>
                 <Form.Item
                     name="password"
@@ -136,8 +94,8 @@ const SignIn = ({client, username, password, nowUser, sendData, setSignedIn, set
                     />
                 </Form.Item>
                 <Form.Item>
-                    <Form.Item name="remember" valuePropName="checked" noStyle>
-                        <Checkbox>記住我的帳號</Checkbox>
+                    <Form.Item noStyle>
+                        <Checkbox checked={keep} onChange={handleKeep(setKeep)}>記住我的帳號</Checkbox>
                     </Form.Item>
                 </Form.Item>
             

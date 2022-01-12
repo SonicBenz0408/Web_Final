@@ -3,15 +3,18 @@ import http from "http"
 import express from "express"
 import mongoose, { models } from "mongoose" 
 import dotenv from "dotenv-defaults"
-import { sendData, sendStatus, initData, favorData } from "./wssConnect"
+
+import { sendData, sendStatus, initData, iconData } from "./wssConnect"
+
 import User from "./models/User"
 import bcrypt from "bcrypt"
-import crawl from "./crawler/crawler"
+import { crawl, crawlIcon } from "./crawler/crawler"
 import nameId from "./crawler/nameId.json"
 import { ConsoleMessage } from "puppeteer"
 import Vtuber from "./models/Vtuber"
 import Stream from "./models/Stream"
 import Upcoming from "./models/Upcoming"
+import Icon from "./models/Icon"
 const { performance } = require('perf_hooks')
 
 dotenv.config()
@@ -42,6 +45,20 @@ const broadcastMessage = (data, status) => {
     })
 }
 
+const broadcastIcon = (icon) => {
+    console.log("boardcastIcon!!");
+    wss.clients.forEach(async (client) => {
+        sendData(["icon", [{ icon }]], client);
+    })
+}
+
+const broadcastStream = (upstream) => {
+    console.log("boardcast!!");
+    wss.clients.forEach(async (client) => {
+        sendData(["upstream", [{upstream}]], client);
+    })
+}
+
 const init_vtuber = async () => {
     for (var key in nameId) {
         for (var keykey in nameId[key]){
@@ -66,94 +83,110 @@ const init_vtuber = async () => {
     }
 };
 
+const crawlAllIcon = async () => {
+    let allIcon = []
+    for (var corp in nameId){
+        for(var key in nameId[corp]){
+            let output = await crawlIcon(corp, key)
+            allIcon.push(output)
+        }
+    }
+
+    await Icon.deleteMany({})
+
+    for(let i = 0; i < allIcon.length; i++){
+        let icon = new Icon(allIcon[i])
+        await icon.save()
+    }
+
+    // broadcastIcon(allIcon)
+}
+
 const crawl_str_ups = async() => {
-    // await Stream.deleteMany({});
-    // await Upcoming.deleteMany({});
+    let upstream_data = {};
     let output_stream = [];
     let output_up = [];
     for (var corp in nameId){
         for(var key in nameId[corp]){
+            upstream_data[key] = {live: [], upcoming: []};
             if(nameId[corp].hasOwnProperty(key)){
                 let output = await crawl(corp, key);
                 for(let i = 0; i < output[0].length; i++){
-                    output_stream.push({
+                    let tmp_stream = {
                         corp: corp, 
                         img: output[0][i].img, 
                         url: output[0][i].addr,
                         title: output[0][i].title,
-                        id: nameId[corp][key]});
+                        id: nameId[corp][key]
+                    };
+                    output_stream.push(tmp_stream);
+                    upstream_data[key].live.push(tmp_stream);
                 }
                 for(let i = 0; i < output[1].length; i++){
-                    output_up.push({
+                    let tmp_up = {
                         corp: corp, 
                         img: output[1][i].img, 
                         url: output[1][i].addr,
                         title: output[1][i].title,
                         id: nameId[corp][key],
                         time: output[1][i].time
-                    });
+                    };
+                    output_up.push(tmp_up);
+                    upstream_data[key].upcoming.push(tmp_up)
                 }
+                if(upstream_data[key].upcoming.length === 0 && upstream_data[key].live.length === 0)
+                    delete upstream_data[key];
             }
             console.log(`finish ${key}`);
         }
         console.log(`Done ${corp}`);
     }
-    var start = performance.now();
-
+    console.log(upstream_data);
+    broadcastStream(upstream_data);
     await Stream.deleteMany({});
     await Upcoming.deleteMany({});
     for(let i = 0; i < output_stream.length; i++){
-        let stream = new Stream({
-            corp: output_stream[i].corp,
-            img: output_stream[i].img, 
-            url: output_stream[i].url,
-            title: output_stream[i].title,
-            id: output_stream[i].id
-        });
+        let stream = new Stream(output_stream[i]);
         await stream.save();
     }
 
-    for(let i = 0; i < output_stream.length; i++){
-        let upstream = new Upcoming({
-            corp: output_up[i].corp,
-            img: output_up[i].img, 
-            url: output_up[i].url,
-            title: output_up[i].title,
-            id: output_up[i].id,
-            time: output_up[i].time
-        });
+    for(let i = 0; i < output_up.length; i++){
+        let upstream = new Upcoming(output_up[i]);
         await upstream.save();
     }
-    var end = performance.now();
-    console.log(`Call to doSomething took ${end - start} milliseconds`);
 
 }
 
 db.once("open", async () => {
     console.log("MongoDB connected")
+    crawlAllIcon();
     crawl_str_ups();
-    // const output = await crawl("彩虹社", "叶")
-    // console.log(output)
-    // var start = performance.now();
-    // crawl_str_ups();
-    // var end = performance.now();
-    // console.log(`Call to doSomething took ${end - start} milliseconds`)
-    setInterval(crawl_str_ups, 1800000);
+    //setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
             const [task, payload] = JSON.parse(data)
-            console.log(task, payload)
+            console.log("task: " + task)
+            console.log(payload)
             switch (task) {
-                case "init": {
+                //  to initialize homepage
+                case "upstream": {
                     initData(ws)
                     break
                 }
+                // frontend: sendData(['favor', [{username}]])
                 case "favor": {
+                    
                     const {username} = payload[0]
-                    const user = await User.findOne({ username })
-                    favorData(ws, user.favor)
+                    const user = await User.findOne({ username });
+                    const favor = user.favor;
+                    console.log(favor);
+                    sendData(["favor", [{favor: favor}]], ws);
+                    break;
+                }
+                case "icon": {
+                    iconData(ws)
                     break
                 }
                 case "login": {
@@ -167,7 +200,7 @@ db.once("open", async () => {
                         console.log(userHash)
                         const check = await bcrypt.compare(password, userHash[0].hash)
                         if(check){
-                            sendData([ "login", [{ msg: "Login successfully!", status: "success"}]], ws)
+                            sendData([ "login", [{ msg: "Login successfully!", status: "success", loginUser: username }]], ws)
                             console.log(`${username} logs in!`)
                         }
                         else{
@@ -201,28 +234,17 @@ db.once("open", async () => {
                     }
                     break
                 }
-                // subscribe channel
+                // frontend: sendData(['subscribe', [{ username, favor: ["沙花叉クロヱ", "宝鐘マリン"]}]]);
                 case "subscribe": {
-                    const { username, id } = payload[0]
-                    let  user = await User.findOne({username})
-                    if( !user.favor.includes(id) ){
-                        user.favor.push(id);
-                        user.save();
-                        console.log("here subscribe: ", user)
-                    }
-                    break
-                }
-                case "unsubscribe": {
-                    const { username, id } = payload[0]
-                    let  user = await User.findOne({username})
-                    if( !user.favor.includes(id) ){
-                        const index = user.favor.indexOf(id);
-                        if (index > -1) {
-                            user.favor.splice(index, 1);
-                        }
-                        user.favor.save();
-                    }
-                    break
+                    const { username, favor } = payload[0]
+                    await User.findOne({username})
+                    .exec( async (err, res) => {
+                        if (err) throw err;
+                        res.favor = favor;
+                        await res.save();
+                        console.log(res);
+                    });
+                    break;
                 }
                 default: break
             }
@@ -235,3 +257,4 @@ db.once("open", async () => {
         console.log(`Listening on http://localhost:${PORT}`)
     })
 })
+

@@ -1,9 +1,9 @@
-import { Form, Input, Button, Checkbox, message } from "antd";
+import { Form, Input, Button, message } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
 import { useState } from "react";
 
-const Regist = ({client, sendData, setUsername, setRegister, navigate}) => {
+const Regist = ({client, sendData, setUsername, /*setRegister,*/ navigate}) => {
     
     const [regUsername, setRegUsername] = useState("")
     const [regPassword, setRegPassword] = useState("")
@@ -59,7 +59,7 @@ const Regist = ({client, sendData, setUsername, setRegister, navigate}) => {
                     setRegUsername("")
                     setRegPassword("")
                     setCheckPassword("")
-                    setRegister(false)
+                    //setRegister(false)
                     navigate("/login")
                 }
                 break

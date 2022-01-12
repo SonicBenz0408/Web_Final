@@ -1,7 +1,6 @@
 import { Menu } from "antd"
 import styled from "styled-components"
 import { HomeOutlined, HeartOutlined, ProfileOutlined } from "@ant-design/icons"
-import { useState } from "react"
 
 const Wrapper = styled.div`
     width: 200px;
@@ -10,10 +9,11 @@ const Wrapper = styled.div`
     flex-direction: column;
     background-color: rgb(54,54,54);
     transition: .5s;
-    padding-top: 75px ;
+    margin-top: 75px ;
+    position: fixed ;
 `
 
-const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {
+const SideBar = ({ nowUser, menuKey, setMenuKey, userFavor, setFavorTemp, navigate }) => {
     
     const handleMenuClick = (event) => {
         if(event.key === "favor") toFavor()
@@ -22,13 +22,14 @@ const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {
 
     const toNotFavor = (to) => {
         if (menuKey === "favor"){
-            setFavorList([])
+            setFavorTemp(userFavor)
         }
         setMenuKey(to)
         //navigate(`/home/${to}`)
     }
     const toFavor = () => {
         setMenuKey("favor")
+        setFavorTemp(userFavor)
         //navigate("/home/favor")
     } 
 
@@ -44,13 +45,12 @@ const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {
     </> :
     <></>
 
-
     return (
         <Wrapper>
             <Menu
                 className="side-menu"
                 selectedKeys={[menuKey]}
-                defaultSelectedKeys={["Home"]}
+                defaultSelectedKeys={["home"]}
                 mode="inline"
                 theme="dark"    
             >
