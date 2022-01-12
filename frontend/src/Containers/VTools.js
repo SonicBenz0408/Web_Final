@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react"
 import { message } from "antd";
 import styled from "styled-components"
 import SignIn from "./signIn"
-import { NavLink, Routes, Route, useNavigate } from "react-router-dom"
+import { Routes, Route, useNavigate } from "react-router-dom"
 import Home from "./homePage"
 import Regist from "./regist"
 
@@ -22,8 +22,8 @@ const VTools = () => {
     const [nowUser, setNowUser] = useState(null)
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
-    const [signedIn, setSignedIn] = useState(false)
-    const [register, setRegister] = useState(false)
+    //const [signedIn, setSignedIn] = useState(false)
+    //const [register, setRegister] = useState(false)
     const [menuKey, setMenuKey] = useState("home")
 
     const [userFavor, setUserFavor] = useState([])
@@ -36,8 +36,7 @@ const VTools = () => {
     const [Stream, setStream] = useState([])
     const [LiveStream, setLiveStream] = useState([])
     const [UpcomingStream, setUpcomingStream] = useState([])
-
-
+    
     const navigate = useNavigate()
     
     const sendData = async (data) => {
@@ -120,7 +119,7 @@ const VTools = () => {
                     }
                     else{
                         message.success(msg, 2)
-                        setSignedIn(true)
+                        //setSignedIn(true)
                         setNowUser(loginUser)
                         await sendData(["favor", [{ username: loginUser }]])
                         setMenuKey("home")
@@ -142,7 +141,7 @@ const VTools = () => {
                     }
                     else{
                         message.success(msg)
-                        setRegister(false)
+                        //setRegister(false)
                     }
                     break
                 }
@@ -161,10 +160,10 @@ const VTools = () => {
         nowUser={nowUser}
         sendData={sendData}
         setUserFavor={setUserFavor}
-        setSignedIn={setSignedIn}
+        //setSignedIn={setSignedIn}
         setUsername={setUsername}
         setPassword={setPassword}
-        setRegister={setRegister}
+        //setRegister={setRegister}
         setNowUser={setNowUser}
         navigate={navigate}
     />
@@ -184,13 +183,13 @@ const VTools = () => {
         LiveStream={LiveStream}
         UpcomingStream={UpcomingStream}
         navigate={navigate}
-        setSignedIn={setSignedIn}
+        //setSignedIn={setSignedIn}
     />
     const registScene = <Regist
         client={ws.current}
         sendData={sendData}
         setUsername={setUsername}
-        setRegister={setRegister}
+        //setRegister={setRegister}
         navigate={navigate}
     />
 

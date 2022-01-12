@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import { Dropdown, Menu } from "antd"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import { PoweroffOutlined } from "@ant-design/icons" 
 import { NavLink } from "react-router-dom";
 const Wrapper = styled.div`
     width: 100% ;
@@ -33,10 +32,10 @@ const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
     const hasLoginMenu = (
         <>
             <p>{nowUser}</p>
-            <Menu.Item>
+            <Menu.Item key="revisePw">
                 <p>修改密碼</p>
             </Menu.Item>
-            <Menu.Item onClick={logout}>
+            <Menu.Item key="logout" onClick={logout}>
                 <p>登出</p>
             </Menu.Item>
         </>

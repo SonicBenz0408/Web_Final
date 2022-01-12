@@ -1,10 +1,10 @@
-import { Form, Input, Button, Checkbox, message } from "antd";
+import { Form, Input, Button, Checkbox } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
 import { useState } from "react";
 
 
-const SignIn = ({ username, password, nowUser, sendData, setSignedIn, setUsername, setPassword, setRegister, setNowUser, navigate}) => {
+const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUsername, setPassword,/* setRegister,*/ setNowUser, navigate}) => {
     
     const [keep, setKeep] = useState(false)
     const [keepUsername, setKeepUsername] = useState("")
@@ -32,13 +32,13 @@ const SignIn = ({ username, password, nowUser, sendData, setSignedIn, setUsernam
     }
 
     const logout = () => {
-        setSignedIn(false)
+        //setSignedIn(false)
         setNowUser(null)
         navigate("/")
     }
 
     const gotoRegist = () => {
-        setRegister(true)
+        //setRegister(true)
         navigate("/register")
     }
     const backToHome = () => {

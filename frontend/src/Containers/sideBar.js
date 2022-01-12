@@ -1,7 +1,6 @@
 import { Menu } from "antd"
 import styled from "styled-components"
 import { HomeOutlined, HeartOutlined, ProfileOutlined } from "@ant-design/icons"
-import { useState } from "react"
 
 const Wrapper = styled.div`
     width: 200px;

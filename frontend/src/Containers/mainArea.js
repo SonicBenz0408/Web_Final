@@ -1,8 +1,6 @@
-import { Route, Routes } from "react-router-dom"
 import styled from "styled-components"
-import { Dropdown, Menu, message, Select } from "antd"
+import { message, Select } from "antd"
 import { useState } from "react"
-import Checkbox from "antd/lib/checkbox/Checkbox"
 const { Option } = Select
 
 const Wrapper = styled.div`
@@ -132,8 +130,8 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                     <div className="add">Add</div>
                     <div className="checkbox"></div>
                 </label>
-                <a target="_blank" href={Object.values(icon)[0][1]}>
-                    <img className="icon" src={Object.values(icon)[0][0]}/>
+                <a target="_blank" rel="noreferrer" href={Object.values(icon)[0][1]}>
+                    <img className="icon" src={Object.values(icon)[0][0]} alt=""/>
                 </a>
                 <div className="channel-name">{Object.keys(icon)[0]}</div>
             </InfoWrapper>)}
@@ -144,14 +142,14 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
         <div className="main-title">直播中<span>{LiveStream.length}</span></div>
         <LiveWrapper>
             {LiveStream.map((stream) => 
-                <a target="_blank" href={stream[0].url}><StreamWrapper>
+                <a target="_blank" rel="noreferrer" href={stream[0].url}><StreamWrapper>
                     <img className="thumbnail" src={stream[0].img} alt="" />
                     <div className="text-part">
                         <div className="stream-title">{stream[0].title}</div>
                         <div className="stream-status">直播中</div>
                         <div className="channel-small">
-                            <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
-                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
+                            <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
+                            <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
                     </div>
                 </StreamWrapper></a>
@@ -160,14 +158,14 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
         <div className="main-title">即將開始<span>{UpcomingStream.length}</span></div>
         <UpcomingWrapper>
             {UpcomingStream.map((stream) => 
-                <a href={stream[0].url}><StreamWrapper>
+                <a target="_blank" rel="noreferrer" href={stream[0].url}><StreamWrapper>
                     <img className="thumbnail" src={stream[0].img} alt="" />
                     <div className="text-part">
                         <div className="stream-title">{stream[0].title}</div>
                         <div className="stream-status">即將開始</div>
                         <div className="channel-small">
-                            <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
-                            <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
+                            <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
+                            <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
                     </div>
                 </StreamWrapper></a>

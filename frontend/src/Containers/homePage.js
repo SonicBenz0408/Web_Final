@@ -1,6 +1,6 @@
-import { useState, useRef } from "react"
+import { useState } from "react"
 import styled from "styled-components"
-import { BrowserRouter, NavLink, Switch, Route } from "react-router-dom"
+//import { BrowserRouter, NavLink, Switch, Route } from "react-router-dom"
 import TopBar from "./topBar"
 import SideBar from "./sideBar"
 import MainArea from "./mainArea"

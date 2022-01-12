@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './Containers/App';
 import reportWebVitals from './reportWebVitals';
-import "antd/dist/antd.css" ;
+import 'antd/dist/antd.min.css'
 import './Containers/signIn.css'
 import './Containers/regist.css'
 import "./Containers/topBar.css"
