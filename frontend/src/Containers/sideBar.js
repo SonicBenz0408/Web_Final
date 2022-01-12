@@ -10,9 +10,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     background-color: rgb(54,54,54);
     transition: .5s;
-    margin-top: 75px ;
-    position: fixed ;
-}
+    padding-top: 75px ;
 `
 
 const SideBar = ({ nowUser, menuKey, setMenuKey, setFavorList, navigate }) => {

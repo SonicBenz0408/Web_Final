@@ -24,7 +24,7 @@ const Home = ({ menuKey, setMenuKey, nowUser, setNowUser, setSignedIn, navigate 
     
     const Main = !nowUser ?
         <div className="not-login">
-            <h1>Please login first!</h1> 
+            <h1>Please login first!</h1>
         </div>
         :
         <MainArea menuKey={menuKey} liveList={liveList} upcomingList={upcomingList} favorList={favorList} setFavorList={setFavorList}/>

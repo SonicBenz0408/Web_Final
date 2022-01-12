@@ -5,6 +5,7 @@ const Wrapper = styled.div`
     box-sizing: border-box;
     padding: 20px;
     width: 100%;
+    height: 100%;
     margin-top: 75px;
     margin-left: 200px ;
     overflow-y: scroll;
