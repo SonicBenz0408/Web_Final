@@ -25,7 +25,8 @@
     "dotenv-defaults": "^3.0.0",
     "mongoose": "^6.1.2"
   },
+  "type": "module",
   "scripts": {
-    "start": "nodemon server.js --ext js --exec babel-node"
+    "start": "node --experimental-json-modules server.js"
   }
 }

@@ -1,19 +1,19 @@
 import WebSocket from "ws"
 import http from "http"
 import express from "express"
-import mongoose, { models } from "mongoose" 
+import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
 
-import { sendData, sendStatus, initData, iconData } from "./wssConnect"
+import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
 
-import User from "./models/User"
+import User from "./models/User.js"
 import bcrypt from "bcrypt"
-import { crawl, crawlIcon } from "./crawler/crawler"
+import { crawl, crawlIcon } from "./crawler/crawler.js"
 import nameId from "./crawler/nameId.json"
-import Vtuber from "./models/Vtuber"
-import Stream from "./models/Stream"
-import Upcoming from "./models/Upcoming"
-import Icon from "./models/Icon"
+import Vtuber from "./models/Vtuber.js"
+import Stream from "./models/Stream.js"
+import Upcoming from "./models/Upcoming.js"
+import Icon from "./models/Icon.js"
 
 dotenv.config()
 
