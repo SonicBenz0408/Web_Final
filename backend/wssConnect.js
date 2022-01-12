@@ -1,5 +1,3 @@
-import User from "./models/User.js"
-import Vtuber from "./models/Vtuber.js"
 import Upcoming from "./models/Upcoming.js"
 import Stream from "./models/Stream.js"
 import nameId from "./crawler/nameId.json"
@@ -52,31 +50,37 @@ const iconData = async (ws) => {
 
     var allData = { "Hololive": [], "彩虹社": [], "其他": [] }
 
-    var dbHoloIcon = await Icon.find({'corp': "Hololive"}, "-_id -__v")
-    
-    for(let i=0 ; i < dbHoloIcon.length ; i++){
-        let name = {}
-        name[dbHoloIcon[i]["name"]] = [dbHoloIcon[i]["icon"], dbHoloIcon[i]["url"], dbHoloIcon[i]["corp"]]
-        allData["Hololive"].push(name)
-    }
+    await Icon.find({'corp': "Hololive"}, "-_id -__v").exec((err, res) => {
+        if(err) throw err
+        for(let i=0 ; i < res.length ; i++){
+            let name = {}
+            name[res[i]["name"]] = [res[i]["icon"], res[i]["url"], res[i]["corp"]]
+            allData["Hololive"].push(name)
+        }
+    })
 
-    var dbNijiIcon = await Icon.find({'corp': "彩虹社"}, "-_id -__v")
-    
-    for(let i=0 ; i < dbHoloIcon.length ; i++){
-        let name = {}
-        name[dbNijiIcon[i]["name"]] = [dbNijiIcon[i]["icon"], dbNijiIcon[i]["url"], dbNijiIcon[i]["corp"]]
-        allData["彩虹社"].push(name)
-    }
+    await Icon.find({'corp': "彩虹社"}, "-_id -__v").exec((err, res) => {
+        if(err) throw err
+        for(let i=0 ; i < res.length ; i++){
+            let name = {}
+            name[res[i]["name"]] = [res[i]["icon"], res[i]["url"], res[i]["corp"]]
+            allData["彩虹社"].push(name)
+        }
+    })
 
-    var dbOtherIcon = await Icon.find({'corp': "其他"}, "-_id -__v")
-    
-    for(let i=0 ; i < dbOtherIcon.length ; i++){
-        let name = {}
-        name[dbOtherIcon[i]["name"]] = [dbOtherIcon[i]["icon"], dbOtherIcon[i]["url"], dbNijiIcon[i]["corp"]]
-        allData["其他"].push(name)
-    }
+    await Icon.find({'corp': "其他"}, "-_id -__v").exec((err, res) => {
+        if(err) throw err
+        for(let i=0 ; i < res.length ; i++){
+            let name = {}
+            name[res[i]["name"]] = [res[i]["icon"], res[i]["url"], res[i]["corp"]]
+            allData["其他"].push(name)
 
-    sendData(["icon", [{ allData }]], ws)
+            if(i === res.length - 1){
+                // console.log(upstream);
+                sendData(["icon", [{ allData }]], ws)
+            }
+        }
+    })
 
 }
 
