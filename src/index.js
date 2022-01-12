@@ -1,18 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './Containers/App';
+import App from './App';
 import reportWebVitals from './reportWebVitals';
-import 'antd/dist/antd.min.css'
-import './Containers/signIn.css'
-import './Containers/regist.css'
-import "./Containers/topBar.css"
-import "./Containers/sideBar.css"
-import "./Containers/mainArea.css"
-import "./Containers/homePage.css"
 
 ReactDOM.render(
-  <App />,
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
   document.getElementById('root')
 );
 
