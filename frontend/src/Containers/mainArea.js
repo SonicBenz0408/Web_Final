@@ -145,12 +145,11 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
         <LiveWrapper>
             {LiveStream.map((stream) => 
                 <a target="_blank" href={stream[0].url}><StreamWrapper>
-                    {console.log(stream)}
                     <img className="thumbnail" src={stream[0].img} alt="" />
                     <div className="text-part">
-                        <div class="stream-title">{stream[0].title}</div>
-                        <div class="stream-status">直播中</div>
-                        <div class="channel-small">
+                        <div className="stream-title">{stream[0].title}</div>
+                        <div className="stream-status">直播中</div>
+                        <div className="channel-small">
                             <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
                             <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
@@ -162,12 +161,11 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
         <UpcomingWrapper>
             {UpcomingStream.map((stream) => 
                 <a href={stream[0].url}><StreamWrapper>
-                    {console.log(stream)}
                     <img className="thumbnail" src={stream[0].img} alt="" />
                     <div className="text-part">
-                        <div class="stream-title">{stream[0].title}</div>
-                        <div class="stream-status">即將開始</div>
-                        <div class="channel-small">
+                        <div className="stream-title">{stream[0].title}</div>
+                        <div className="stream-status">即將開始</div>
+                        <div className="channel-small">
                             <a target="_blank" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
                             <a target="_blank" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
