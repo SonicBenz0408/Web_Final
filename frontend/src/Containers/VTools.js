@@ -36,34 +36,13 @@ const VTools = () => {
     const [Stream, setStream] = useState([])
     const [LiveStream, setLiveStream] = useState([])
     const [UpcomingStream, setUpcomingStream] = useState([])
-    
+        
     const navigate = useNavigate()
-    
+
     const sendData = async (data) => {
         await ws.current.send(JSON.stringify(data))
     }
     
-    const updateFavorStream = () => {
-        const nameList = Object.keys(Stream)
-        let tempLive = []
-        let tempUpcoming = []
-        nameList.forEach(element => {
-            if(userFavor.find(e => e === element)){
-                Stream[element].live.forEach(n => {
-                    n[0]["name"] = element
-                })
-                tempLive = [...tempLive, ...Stream[element].live]
-
-                Stream[element].upcoming.forEach(n => {
-                    n[0]["name"] = element
-                })
-                tempUpcoming = [...tempUpcoming, ...(Stream[element].upcoming)]
-            }
-        })
-        
-        setLiveStream(tempLive)
-        setUpcomingStream(tempUpcoming)
-    }
 
     useEffect(() => {
         ws.current = new WebSocket("ws://localhost:4000")
@@ -148,11 +127,32 @@ const VTools = () => {
                 default: break
             }
         }
-    }, [])
+    }, [navigate])
 
     useEffect(() => {
+        const updateFavorStream = () => {
+            const nameList = Object.keys(Stream)
+            let tempLive = []
+            let tempUpcoming = []
+            nameList.forEach(element => {
+                if(userFavor.find(e => e === element)){
+                    Stream[element].live.forEach(n => {
+                        n[0]["name"] = element
+                    })
+                    tempLive = [...tempLive, ...Stream[element].live]
+    
+                    Stream[element].upcoming.forEach(n => {
+                        n[0]["name"] = element
+                    })
+                    tempUpcoming = [...tempUpcoming, ...(Stream[element].upcoming)]
+                }
+            })
+            
+            setLiveStream(tempLive)
+            setUpcomingStream(tempUpcoming)
+        }
         updateFavorStream()
-    }, [userFavor])
+    }, [userFavor, Stream])
 
     const signInScene = <SignIn
         username={username}
