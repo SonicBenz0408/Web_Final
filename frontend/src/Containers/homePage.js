@@ -22,7 +22,7 @@ const Home = ({ sendData, menuKey, setMenuKey, nowUser, setNowUser, userFavor, s
         
     const Main = !nowUser ?
         <div className="not-login">
-            <h1>Please login first!</h1> 
+            <h1>Please login first!</h1>
         </div>
         :
         <MainArea 
