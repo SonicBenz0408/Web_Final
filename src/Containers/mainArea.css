@@ -1,0 +1,217 @@
+.main-title {
+    box-sizing: border-box;
+    color: rgb(255, 154, 200);
+    width: 100%;
+    background-color: rgb(30, 30, 30);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.main-title span{
+    color: #fff;
+    background-color: rgb(244, 119, 166);
+    padding: 0px 8px;
+    margin-left: 8px;
+    border-radius: 8px;
+}
+
+.item{
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: .2s;
+}
+.item:hover{
+    background-color: rgb(60,60,60);
+}
+.item:active{
+    background-color: rgb(90, 90, 90);
+}
+.item img{
+    box-sizing: border-box;
+    width: 300px;
+    height: 200px;
+}
+
+.item > .text{
+    padding: 20px;
+}
+.text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.text > .title{
+    font-size: 20px;
+    color: #ddd;
+    border-radius: 2px;
+    transition: .3s;
+}
+.text > .status{
+    color: #f00;
+    align-self: flex-start;
+    border: 1px solid #f00;
+    padding: 0 3px;
+    margin: 8px 0;
+}
+.text > .channel{
+    cursor: pointer;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    color: #0af;
+}
+.text > .channel > img{
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+.text > .channel > a{
+    color: #0af;
+    padding: 0 10px;
+    align-self: center;
+    text-decoration: none;
+}
+.text > .channel > a:hover{
+    text-decoration: underline;
+}
+
+.favor-button{
+    cursor: pointer;
+    margin: 0 0 0 15px;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    background-color: #999;
+    font-size: 16px;
+    transition: .2s;
+    color: black;
+}
+.favor-button:hover{
+    background-color: #aaa;
+}
+.favor-button:active{
+    background-color: #ccc;
+}
+
+.company-title{
+    display: flex;
+    box-sizing: border-box;
+    color: rgb(255, 154, 200);
+    width: 100%;
+    background-color: rgb(30, 30, 30);
+    padding: 10px 25px;
+    border-radius: 5px;
+    margin: 20px 0 0 0;
+    border: none;
+}
+
+.company-title > span{
+    color: #fff;
+    background-color: rgb(244, 119, 166);
+    padding: 0px 8px;
+    margin-left: 8px;
+    border-radius: 8px;
+
+}
+
+.icon{
+    box-sizing: border-box;
+    border-radius: 100px;
+    width: 70px;
+    height: 70px;
+}
+
+.channel-name{
+    font-size: 16px;
+    color: #0af;
+}
+.invisible-input{
+    display: none;
+}
+.info-check{
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    cursor: pointer;
+    color: rgb(244, 119, 166);
+    user-select: none;
+}
+
+.info-check:hover > .add{
+    text-decoration: underline;
+}
+
+.info-check > .add + .checkbox{
+    margin-left: 5px;
+    width: 25px;
+    height: 25px;
+    border: 5px solid #fff;
+    background-color: #fff;
+    border-radius: 10px;
+}
+
+.add {
+    font-size: 18px;
+}
+
+.invisible-input:checked + .info-check > .add + .checkbox{
+    background-color: rgb(244, 119, 166);
+}
+
+
+.thumbnail {
+    box-sizing: border-box;
+    width: 300px;
+    height: 200px;
+}
+
+.text-part {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;
+}
+
+.stream-title {
+    font-size: 20px;
+    color: #ddd;
+    border-radius: 2px;
+    transition: .3s;
+}
+
+.stream-status {
+    color: #f00;
+    align-self: flex-start;
+    border: 1px solid #f00;
+    padding: 0 3px;
+    margin: 8px 0;
+}
+
+.channel-small {
+    cursor: pointer;
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    color: #0af;
+}
+
+.channel-small-pic {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+.channel-small-name {
+    color: #0af;
+    padding: 0 10px;
+    align-self: center;
+    text-decoration: none;
+}
+
+.channel-small-name:hover {
+    text-decoration: underline;
+}

@@ -7,9 +7,9 @@
   "license": "MIT",
 
   "scripts": {
-    "start" : "cd backend && yarn server",
+    "start" : "cd backend && yarn install && yarn server",
     "server" : "cd backend && yarn server",
-    "build" : "cd backend && yarn install && yarn build"
+    "build" : "react-scripts build"
   }
 }
 
