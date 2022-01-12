@@ -10,12 +10,10 @@ import User from "./models/User"
 import bcrypt from "bcrypt"
 import { crawl, crawlIcon } from "./crawler/crawler"
 import nameId from "./crawler/nameId.json"
-import { ConsoleMessage } from "puppeteer"
 import Vtuber from "./models/Vtuber"
 import Stream from "./models/Stream"
 import Upcoming from "./models/Upcoming"
 import Icon from "./models/Icon"
-const { performance } = require('perf_hooks')
 
 dotenv.config()
 
