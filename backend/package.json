@@ -26,6 +26,7 @@
     "mongoose": "^6.1.2"
   },
   "scripts": {
+    "build": "react-scripts build",
     "server": "nodemon server.js --ext js --exec babel-node"
   }
 }
