@@ -1,7 +1,8 @@
 import WebSocket from "ws"
-import https from "https"
+//import https from "https"
+import http from "http"
 import express from "express"
-import mongoose, { models } from "mongoose" 
+import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
 
 import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
@@ -29,7 +30,7 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
-const server = https.createServer(app)
+const server = http.createServer(app)
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
@@ -270,7 +271,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.port || 443
+    const PORT = process.env.PORT || 443
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)
