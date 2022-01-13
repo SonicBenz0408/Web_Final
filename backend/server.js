@@ -1,6 +1,6 @@
 import WebSocket from "ws"
-import http from "http"
-//import https from "https"
+//import http from "http"
+import https from "https"
 import fs from "fs"
 import express from "express"
 import mongoose from "mongoose" 
@@ -34,14 +34,14 @@ const app = express()
 
 const server = http.createServer(app)
 
-/*
+
 const server = https.createServer({
-    key: fs.readFileSync("../../server-key.pem"),
-    cert: fs.readFileSync('../../server-cert.pem'),
+    key: fs.readFileSync("../server-key.pem"),
+    cert: fs.readFileSync('../server-cert.pem'),
     requestCert: false,
     rejectUnauthorized: false
 }, app)
-*/
+
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
