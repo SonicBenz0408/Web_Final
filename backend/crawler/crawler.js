@@ -1,6 +1,6 @@
-const puppeteer = require("puppeteer")
-const cheerio = require("cheerio")
-const vtInfo = require("./nameId.json") 
+import puppeteer from "puppeteer"
+import cheerio from "cheerio"
+import vtInfo from "./nameId.json" 
 
 const ytPrefix = "https://youtube.com/"
 const liveSuffix = "/videos?view=2&live_view=501"

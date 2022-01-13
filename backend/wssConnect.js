@@ -1,9 +1,7 @@
-import User from "./models/User"
-import Vtuber from "./models/Vtuber"
-import Upcoming from "./models/Upcoming"
-import Stream from "./models/Stream"
+import Upcoming from "./models/Upcoming.js"
+import Stream from "./models/Stream.js"
 import nameId from "./crawler/nameId.json"
-import Icon from "./models/Icon"
+import Icon from "./models/Icon.js"
 
 const sendData = (data, ws) => {
     ws.send(JSON.stringify(data))

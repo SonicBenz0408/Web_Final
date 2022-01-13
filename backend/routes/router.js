@@ -1,7 +1,7 @@
 import express from "express"
 import bcrypt from "bcrypt"
-import Vtuber from "../models/Vtuber"
-import User from "../models/User"
+import Vtuber from "../models/Vtuber.js"
+import User from "../models/User.js"
 
 const saltRounds = 10
 
