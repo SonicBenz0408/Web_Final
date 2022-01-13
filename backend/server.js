@@ -1,5 +1,7 @@
 import WebSocket from "ws"
 import http from "http"
+//import https from "https"
+import fs from "fs"
 import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
@@ -29,7 +31,17 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
+
 const server = http.createServer(app)
+
+/*
+const server = https.createServer({
+    key: fs.readFileSync("../../server-key.pem"),
+    cert: fs.readFileSync('../../server-cert.pem'),
+    requestCert: false,
+    rejectUnauthorized: false
+}, app)
+*/
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
@@ -57,8 +69,25 @@ const broadcastStream = (upstream) => {
     })
 }
 
+const to_number = (str) => {
+    // 2022/1/13 晚上20:00
+    // let str = "2023/1/1 凌晨0:00"
+    str = str.split(" ")
+    let date = str[0].split("/");
+    if (date.length < 3)
+        return 0;
+    if (date[1].length < 2) date[1] = '0' + date[1];
+    if (date[2].length < 2) date[2] = '0' + date[2];
+    let len = str[1].length;
+    let hm = str[1].substring(2, len).split(":");
+    if (hm[0].length < 2) hm[0] = '0' + hm[0];
+    if (hm[1].length < 2) hm[1] = '0' + hm[1];
+    return (parseInt(date[0]+date[1]+date[2]+hm[0]+hm[1]));
+}
+
 const init_vtuber = async () => {
     for (var key in nameId) {
+        if(key === 'Hololive') continue;
         for (var keykey in nameId[key]){
             if (nameId[key].hasOwnProperty(keykey) && key === 'Hololive') {
                 // let output = await crawl(key, keykey);
@@ -84,7 +113,9 @@ const init_vtuber = async () => {
 const crawlAllIcon = async () => {
     let allIcon = []
     for (var corp in nameId){
+        // if (corp === '彩虹社') continue;
         for(var key in nameId[corp]){
+            console.log(key);
             let output = await crawlIcon(corp, key)
             allIcon.push(output)
         }
@@ -127,8 +158,10 @@ const crawl_str_ups = async() => {
                         url: output[1][i].addr,
                         title: output[1][i].title,
                         id: nameId[corp][key],
-                        time: output[1][i].time
+                        time: output[1][i].time,
+                        timetonum: to_number(output[1][i].time)
                     };
+                    // console.log(to_number(output[1][i].time))
                     output_up.push(tmp_up);
                     upstream_data[key].upcoming.push(tmp_up)
                 }
@@ -139,7 +172,7 @@ const crawl_str_ups = async() => {
         }
         console.log(`Done ${corp}`);
     }
-    console.log(upstream_data);
+    // console.log(upstream_data);
     broadcastStream(upstream_data);
     await Stream.deleteMany({});
     await Upcoming.deleteMany({});
@@ -157,9 +190,10 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    crawlAllIcon();
-    crawl_str_ups();
-    //setInterval(crawl_str_ups, 1800000);
+    // crawlAllIcon();
+    // crawl_str_ups();
+    // to_number();
+    // setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
@@ -179,7 +213,7 @@ db.once("open", async () => {
                     const {username} = payload[0]
                     const user = await User.findOne({ username });
                     const favor = user.favor;
-                    console.log(favor);
+                    // console.log(favor);
                     sendData(["favor", [{favor: favor}]], ws);
                     break;
                 }
@@ -240,7 +274,6 @@ db.once("open", async () => {
                         if (err) throw err;
                         res.favor = favor;
                         await res.save();
-                        console.log(res);
                     });
                     break;
                 }
@@ -249,7 +282,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.port || 4000
+    const PORT = process.env.PORT || 443
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)
