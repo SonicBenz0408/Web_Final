@@ -32,8 +32,7 @@ const saltRounds = 10
 
 const app = express()
 
-const server = http.createServer(app)
-
+//const server = http.createServer(app)
 
 const server = https.createServer({
     key: fs.readFileSync("../server-key.pem"),
