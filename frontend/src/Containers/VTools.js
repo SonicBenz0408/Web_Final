@@ -45,7 +45,7 @@ const VTools = () => {
     
 
     useEffect(() => {
-        ws.current = new WebSocket("ws://localhost:4000")
+        ws.current = new WebSocket("ws://130.211.254.99:80")
         ws.current.onopen = async () => {
             console.log("connected")
             await sendData(["icon", {}])
