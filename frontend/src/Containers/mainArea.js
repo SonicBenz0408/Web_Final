@@ -167,6 +167,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                             <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
                             <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
+                        <div className="stream-time">{stream[0].time}</div>
                     </div>
                 </StreamWrapper></a>
             )}  

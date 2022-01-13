@@ -191,6 +191,11 @@
     margin: 8px 0;
 }
 
+.stream-time {
+    color: rgb(160, 160, 160);
+    margin-top: 15px;
+}
+
 .channel-small {
     cursor: pointer;
     align-self: flex-start;

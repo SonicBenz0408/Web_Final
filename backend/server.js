@@ -1,7 +1,9 @@
 import WebSocket from "ws"
-import https from "https"
+import http from "http"
+//import https from "https"
+import fs from "fs"
 import express from "express"
-import mongoose, { models } from "mongoose" 
+import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
 
 import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
@@ -29,7 +31,16 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
-const server = https.createServer(app)
+
+const server = http.createServer(app)
+/*
+const server = https.createServer({
+    key: fs.readFileSync("../server-key.pem"),
+    cert: fs.readFileSync('../server-cert.pem'),
+    requestCert: false,
+    rejectUnauthorized: false
+}, app)
+*/
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
@@ -101,7 +112,7 @@ const init_vtuber = async () => {
 const crawlAllIcon = async () => {
     let allIcon = []
     for (var corp in nameId){
-        if (corp === '彩虹社') continue;
+        // if (corp === '彩虹社') continue;
         for(var key in nameId[corp]){
             console.log(key);
             let output = await crawlIcon(corp, key)
@@ -178,10 +189,10 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    // crawlAllIcon();
-    // crawl_str_ups();
+    crawlAllIcon();
+    crawl_str_ups();
     // to_number();
-    setInterval(crawl_str_ups, 1800000);
+    // setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
@@ -270,7 +281,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.port || 443
+    const PORT = process.env.PORT || 443
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)

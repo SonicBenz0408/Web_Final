@@ -45,7 +45,7 @@ const VTools = () => {
     
 
     useEffect(() => {
-        ws.current = new WebSocket("wss://130.211.254.99:443")
+        ws.current = new WebSocket("ws://localhost:4000")
         ws.current.onopen = async () => {
             console.log("connected")
             await sendData(["icon", {}])
@@ -130,6 +130,16 @@ const VTools = () => {
     }, [navigate])
 
     useEffect(() => {
+        function compare(a, b) {
+            if (a[0]["timetonum"] < b[0]["timetonum"]) {
+              return -1;
+            }
+            if (a[0]["timetonum"] < b[0]["timetonum"]) {
+              return 1;
+            }
+            return 0;
+        }
+
         const updateFavorStream = () => {
             const nameList = Object.keys(Stream)
             let tempLive = []
@@ -147,7 +157,7 @@ const VTools = () => {
                     tempUpcoming = [...tempUpcoming, ...(Stream[element].upcoming)]
                 }
             })
-            
+            tempUpcoming.sort(compare)
             setLiveStream(tempLive)
             setUpcomingStream(tempUpcoming)
         }

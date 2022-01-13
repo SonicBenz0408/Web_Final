@@ -28,7 +28,7 @@ const initData = async (ws) => {
                         upstream[key].live = [...upstream[key].live, [res[i]]];
                     }
                 })
-    await Upcoming.find({}, "-_id -__v").sort({ created_at: -1 }).limit(200)
+    await Upcoming.find({}, "-_id -__v").sort({ timetonum: -1 }).limit(200)
         .exec((err, res) => {
             if(err) throw err;
             // console.log("hi")
@@ -56,8 +56,7 @@ const iconData = async (ws) => {
         allData["Hololive"].push(name)
     }
     var dbNijiIcon = await Icon.find({'corp': "彩虹社"}, "-_id -__v")
-    
-    for(let i=0 ; i < dbHoloIcon.length ; i++){
+    for(let i=0 ; i < dbNijiIcon.length ; i++){
         let name = {}
         name[dbNijiIcon[i]["name"]] = [dbNijiIcon[i]["icon"], dbNijiIcon[i]["url"], dbNijiIcon[i]["corp"]]
         allData["彩虹社"].push(name)

@@ -32,7 +32,6 @@ const parse = (html, type) => {
             var time = time_link[1] ? 
                 time_link[1].children[0].data.substring(7):
                 time_link[0].children[0].data.substring(7)
-            console.log(time)
             results.push({addr: addr, img: img, title: title, time: time})
         })
     }
@@ -52,7 +51,7 @@ const parseIcon = (html) => {
 
 const crawl = async (corps, name) => {
     const browser = await puppeteer.launch({
-        args: ["--no-sandbox"],
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
         headless: true
     })
     const page = await browser.newPage()
@@ -65,7 +64,6 @@ const crawl = async (corps, name) => {
     // console.log(url)
     await page.goto(url)
     html = await page.content()
-    console.log(name)
     const tempResults = parse(html, "temp")
     
     await browser.close()
@@ -75,7 +73,7 @@ const crawl = async (corps, name) => {
 
 const crawlIcon = async (corps, name) => {
     const browser = await puppeteer.launch({
-        args: ["--no-sandbox"],
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
         headless: true
     })
     const page = await browser.newPage()
@@ -83,14 +81,13 @@ const crawlIcon = async (corps, name) => {
     await page.goto(url, {timeout:0})
     var html = await page.content()
     const img = parseIcon(html)
-    console.log("finish " + name)
+    console.log("finish icon " + name)
     const output = { 
         "name": name,
         "corp": corps,
         "icon": img, 
         "url": url
     }
-    console.log(output)
     return output
 }
 
