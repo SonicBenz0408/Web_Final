@@ -1,21 +1,19 @@
 import WebSocket from "ws"
-import http from "http"
+import https from "https"
 import express from "express"
 import mongoose, { models } from "mongoose" 
 import dotenv from "dotenv-defaults"
 
-import { sendData, sendStatus, initData, iconData } from "./wssConnect"
+import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
 
-import User from "./models/User"
+import User from "./models/User.js"
 import bcrypt from "bcrypt"
-import { crawl, crawlIcon } from "./crawler/crawler"
+import { crawl, crawlIcon } from "./crawler/crawler.js"
 import nameId from "./crawler/nameId.json"
-import { ConsoleMessage } from "puppeteer"
-import Vtuber from "./models/Vtuber"
-import Stream from "./models/Stream"
-import Upcoming from "./models/Upcoming"
-import Icon from "./models/Icon"
-const { performance } = require('perf_hooks')
+import Vtuber from "./models/Vtuber.js"
+import Stream from "./models/Stream.js"
+import Upcoming from "./models/Upcoming.js"
+import Icon from "./models/Icon.js"
 
 dotenv.config()
 
@@ -31,7 +29,7 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
-const server = http.createServer(app)
+const server = https.createServer(app)
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
@@ -272,7 +270,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.port || 4000
+    const PORT = process.env.port || 443
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)
