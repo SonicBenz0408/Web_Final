@@ -239,7 +239,6 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
     : <>
         {aimIcon2.map((icon) =>
             <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
-                {console.log(OtherIcon)}
                 <div class="listitem">
                     <img src={Object.values(icon)[0][0]} alt=""/>
                     <div class="text">
