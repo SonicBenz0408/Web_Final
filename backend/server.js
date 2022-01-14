@@ -207,8 +207,6 @@ db.once("open", async () => {
         ws.onmessage = async (byteString) => {
             const { data } = byteString
             const [task, payload] = JSON.parse(data)
-            console.log("task: " + task)
-            console.log(payload)
             switch (task) {
                 //  to initialize homepage
                 case "upstream": {
