@@ -8,7 +8,6 @@ const Regist = ({client, sendData, setUsername, /*setRegister,*/ navigate}) => {
     const [regUsername, setRegUsername] = useState("")
     const [regPassword, setRegPassword] = useState("")
     const [checkPassword, setCheckPassword] = useState("")
-    //const [checked, setChecked] = useState(false)
    
     const onFinish = (values) => {
         console.log('Success:', values)

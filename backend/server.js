@@ -6,13 +6,12 @@ import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
 
-import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
+import { sendData, initData, iconData } from "./wssConnect.js"
 
 import User from "./models/User.js"
 import bcrypt from "bcrypt"
 import { crawl, crawlIcon } from "./crawler/crawler.js"
 import nameId from "./crawler/nameId.json"
-import Vtuber from "./models/Vtuber.js"
 import Stream from "./models/Stream.js"
 import Upcoming from "./models/Upcoming.js"
 import Icon from "./models/Icon.js"
@@ -33,6 +32,7 @@ const saltRounds = 10
 const app = express()
 
 const server = http.createServer(app)
+
 /*
 const server = https.createServer({
     key: fs.readFileSync("../server-key.pem"),
@@ -46,21 +46,6 @@ const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
 
-const broadcastMessage = (data, status) => {
-    wss.clients.forEach(async (client) => {
-        console.log("data", data)
-        console.log("status", status)
-        sendData(data, client)
-        sendStatus(status, client)
-    })
-}
-
-const broadcastIcon = (icon) => {
-    console.log("boardcastIcon!!");
-    wss.clients.forEach(async (client) => {
-        sendData(["icon", [{ icon }]], client);
-    })
-}
 
 const broadcastStream = (upstream) => {
     console.log("boardcast!!");
@@ -85,37 +70,11 @@ const to_number = (str) => {
     return (parseInt(date[0]+date[1]+date[2]+hm[0]+hm[1]));
 }
 
-const init_vtuber = async () => {
-    for (var key in nameId) {
-        if(key === 'Hololive') continue;
-        for (var keykey in nameId[key]){
-            if (nameId[key].hasOwnProperty(keykey) && key === 'Hololive') {
-                // let output = await crawl(key, keykey);
-                // console.log(output);
-                const check = await Vtuber.find({name: keykey});
-                if(check.length !== 0){
-                    console.log(`${keykey} exists`);
-                }
-                else{
-                    const vtuber = new Vtuber({ 
-                        name: keykey, 
-                        id: nameId[key][keykey], 
-                        corp: key, 
-                        channel : 'https://www.youtube.com/channel/' + nameId[key][keykey]
-                    });
-                    await vtuber.save();
-                }
-            }
-        }
-    }
-};
 
 const crawlAllIcon = async () => {
     let allIcon = []
     for (var corp in nameId){
-        // if (corp === '彩虹社') continue;
         for(var key in nameId[corp]){
-            console.log(key);
             let output = await crawlIcon(corp, key)
             allIcon.push(output)
         }
@@ -128,7 +87,6 @@ const crawlAllIcon = async () => {
         await icon.save()
     }
 
-    // broadcastIcon(allIcon)
 }
 
 const crawl_str_ups = async() => {
@@ -191,9 +149,12 @@ const crawl_str_ups = async() => {
 db.once("open", async () => {
     console.log("MongoDB connected")
     // If db already has the data of icon -> comment
-    //crawlAllIcon();  
+    // crawlAllIcon();  
 
-    //crawl_str_ups();
+    // If your PC can crawl......(電腦會卡)
+    // crawl_str_ups();
+
+    // crawl every 1800000 ms (30min)
     // setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {

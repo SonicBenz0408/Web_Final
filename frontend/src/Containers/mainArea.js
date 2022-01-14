@@ -145,7 +145,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
 
     const favorScene = (favorChoose !== "請選擇公司") ? 
     <>
-        <div className="company-title">{favorChoose}<span>87</span></div>
+        <div className="company-title">{favorChoose}<span>{aimIcon.length}</span></div>
         {aimIcon.map((icon) => 
             <InfoWrapper>
                 <input className="invisible-input" type="checkbox" value={Object.keys(icon)[0]} id={Object.keys(icon)[0]} checked={favorTemp.find(e => e === Object.keys(icon)[0]) !== undefined} onChange={handleTempChange}/>
@@ -239,6 +239,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
     : <>
         {aimIcon2.map((icon) =>
             <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                {console.log(OtherIcon)}
                 <div class="listitem">
                     <img src={Object.values(icon)[0][0]} alt=""/>
                     <div class="text">
