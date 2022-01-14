@@ -10,6 +10,7 @@ const Wrapper = styled.div`
     background-color: rgb(54,54,54);
     transition: .5s;
     margin-top: 75px ;
+    position: fixed;
 `
 
 const SideBar = ({ nowUser, menuKey, setMenuKey, userFavor, setFavorTemp, navigate }) => {
