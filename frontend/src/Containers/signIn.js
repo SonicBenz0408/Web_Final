@@ -20,7 +20,6 @@ const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUse
     const sendLogin = async () => {
         if(username && password){
             await sendData(["login", [{ username, password }]]);
-            if(keep) setKeepUsername(username)
         }
     }
 
