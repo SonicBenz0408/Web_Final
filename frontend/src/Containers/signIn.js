@@ -1,14 +1,10 @@
-import { Form, Input, Button, Checkbox } from "antd";
+import { Form, Input, Button } from "antd";
 import { UserOutlined, LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
-import { useState } from "react";
 
 
 const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUsername, setPassword,/* setRegister,*/ setNowUser, navigate}) => {
     
-    const [keep, setKeep] = useState(false)
-    const [keepUsername, setKeepUsername] = useState("")
-
     const onFinish = (values) => {
         console.log('Success:', values)
     }
@@ -21,9 +17,6 @@ const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUse
 		func(event.target.value);
 	}
 
-    const handleKeep = (func) => (event) => {
-        func(event.target.checked)
-    }
     const sendLogin = async () => {
         if(username && password){
             await sendData(["login", [{ username, password }]]);
@@ -73,7 +66,7 @@ const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUse
                     ]}
                     noStyle={false}
                 >
-                    <Input prefix={<UserOutlined/>} defaultValue={keepUsername} value={username} placeholder="帳號" className="form-input" onChange={handleChange(setUsername)}/>
+                    <Input prefix={<UserOutlined/>} value={username} placeholder="帳號" className="form-input" onChange={handleChange(setUsername)}/>
                 </Form.Item>
                 <Form.Item
                     name="password"
