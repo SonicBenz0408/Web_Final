@@ -43,7 +43,7 @@ const parse = (html, type) => {
             if (hm[0] >= 24){
                 hm[0] = hm[0] - 24
                 date[1] = parseInt(date[1]) + 1
-                if(bigMonth.find(date[0]) && date[1] > 31){
+                if(bigMonth.find(element => element === date[0]) && date[1] > 31){
                     date[0] = parseInt(date[0]) + 1
                     date[1] = date[1] - 31
                 }
@@ -65,13 +65,12 @@ const parse = (html, type) => {
                 }
             }
             
-            if (date[0].length < 2) date[0] = '0' + date[1];
-            if (date[1].length < 2) date[1] = '0' + date[2];
+            if (date[0].length < 2) date[0] = '0' + date[0];
+            if (date[1].length < 2) date[1] = '0' + date[1];
             if (hm[0].length < 2) hm[0] = '0' + hm[0];
             if (hm[1].length < 2) hm[1] = '0' + hm[1];
 
             time = `20${date[2]}/${date[0]}/${date[1]} ${hm[0]}:${hm[1]}`
-            console.log(time)
             var timetonum = parseInt(`${date[2]}${date[0]}${date[1]}${hm[0]}${hm[1]}`)
             
             results.push({addr: addr, img: img, title: title, time: time, timetonum: timetonum})
