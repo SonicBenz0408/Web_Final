@@ -1,5 +1,5 @@
 import { Form, Input, Button, message } from "antd";
-import { UserOutlined, LockOutlined } from "@ant-design/icons"
+import { LockOutlined } from "@ant-design/icons"
 import Title from "../Components/Title.js"
 import { useState } from "react";
 import Cookies from "js-cookie";
