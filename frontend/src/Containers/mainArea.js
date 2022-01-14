@@ -8,7 +8,7 @@ const Wrapper = styled.div`
     padding: 20px;
     width: 100%;
     height: 100% ;
-    padding-top: 90px;
+    margin-top: 75px;
     margin-left: 200px ;
     overflow-y: scroll;
 `
@@ -18,6 +18,10 @@ const LiveWrapper = styled.div`
 `
 const UpcomingWrapper = styled.div`
     padding: 5px 10px;
+`
+const ChannellistWrapper = styled.div`
+    margin: 20px 0 0 0;
+    padding: 10px 10px;
 `
 
 const StreamWrapper = styled.div`
@@ -39,9 +43,11 @@ const StreamWrapper = styled.div`
 
 const ControlWrapper = styled.div`
     display: flex;
+    align-items: center;
     box-sizing: border-box;
     color: rgb(255, 154, 200);
     width: 100%;
+    height: 60px;
     background-color: rgb(30, 30, 30);
     border: 1px solid #fff;
     padding: 10px 25px;
@@ -62,7 +68,8 @@ const InfoWrapper = styled.div`
     box-sizing: border-box;
     width: 190px;
     height: 200px;
-    border: 3px solid #fff;
+    background-color: #333;
+    border: 2px solid #ddd;
     border-radius: 10px;
     margin: 15px;    
 `
@@ -72,8 +79,13 @@ const InfoWrapper = styled.div`
 
 const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTemp, setFavorTemp, HoloIcon, NijiIcon, OtherIcon, WholeIcon, LiveStream, UpcomingStream }) => {
     const [favorChoose, setFavorChoose] = useState("請選擇公司")
+    const [channelChoose, setChannelChoose] = useState("請選擇公司")
+
     const handleChange = (value) => {
         setFavorChoose(value)
+    }
+    const channelChange = (value) => {
+        setChannelChoose(value)
     }
     const changeTemp = (value) => {
         let index = favorTemp.indexOf(value)
@@ -118,6 +130,10 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
         : (favorChoose === "彩虹社") ? NijiIcon
         : (favorChoose === "其他") ? OtherIcon
         : []
+    const aimIcon2 = (channelChoose === "Hololive") ? HoloIcon
+    : (channelChoose === "彩虹社") ? NijiIcon
+    : (channelChoose === "其他") ? OtherIcon
+    : []
 
     const favorScene = (favorChoose !== "請選擇公司") ? 
     <>
@@ -135,6 +151,59 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                 <div className="channel-name">{Object.keys(icon)[0]}</div>
             </InfoWrapper>)}
     </> : <></>
+
+    //白癡要加的部分
+    const listscene = (channelChoose === "請選擇公司") ?
+    <>
+        {HoloIcon.map((icon) =>
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                </div>
+            </a>
+        )}
+        {NijiIcon.map((icon) =>
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                </div>
+            </a>
+        )}
+        {OtherIcon.map((icon) =>
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                </div>
+            </a>
+        )}
+    </> : <>
+        {aimIcon2.map((icon) =>
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                </div>
+            </a>
+        )}
+    </>
+    //白癡要加的部分
+
+
 
     const home = 
     <>
@@ -190,7 +259,18 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
     </>
 
     const channelList = <>
-        <button>hihi</button>
+        <ControlWrapper style={{justifyContent: 'space-between'}}>
+            <div style={{fontSize:16}}>{(channelChoose==="請選擇公司") ? "所有頻道" : channelChoose}</div>
+            <Select defaultValue="請選擇公司" value={channelChoose} style={{ width: 120}} onChange={channelChange}>
+                <Option value="請選擇公司">請選擇公司</Option>
+                <Option value="Hololive">Hololive</Option>
+                <Option value="彩虹社">彩虹社</Option>
+                <Option value="其他">其他</Option>
+            </Select>
+        </ControlWrapper>
+        <ChannellistWrapper>
+            {listscene}
+        </ChannellistWrapper>
     </>
 
     const scene = (menuKey === "home") ? home 

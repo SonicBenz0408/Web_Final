@@ -1,21 +1,21 @@
 import WebSocket from "ws"
 import http from "http"
+//import https from "https"
+import fs from "fs"
 import express from "express"
-import mongoose, { models } from "mongoose" 
+import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
 
-import { sendData, sendStatus, initData, iconData } from "./wssConnect"
+import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
 
-import User from "./models/User"
+import User from "./models/User.js"
 import bcrypt from "bcrypt"
-import { crawl, crawlIcon } from "./crawler/crawler"
+import { crawl, crawlIcon } from "./crawler/crawler.js"
 import nameId from "./crawler/nameId.json"
-import { ConsoleMessage } from "puppeteer"
-import Vtuber from "./models/Vtuber"
-import Stream from "./models/Stream"
-import Upcoming from "./models/Upcoming"
-import Icon from "./models/Icon"
-const { performance } = require('perf_hooks')
+import Vtuber from "./models/Vtuber.js"
+import Stream from "./models/Stream.js"
+import Upcoming from "./models/Upcoming.js"
+import Icon from "./models/Icon.js"
 
 dotenv.config()
 
@@ -31,7 +31,16 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
+
 const server = http.createServer(app)
+/*
+const server = https.createServer({
+    key: fs.readFileSync("../server-key.pem"),
+    cert: fs.readFileSync('../server-cert.pem'),
+    requestCert: false,
+    rejectUnauthorized: false
+}, app)
+*/
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
@@ -103,7 +112,7 @@ const init_vtuber = async () => {
 const crawlAllIcon = async () => {
     let allIcon = []
     for (var corp in nameId){
-        if (corp === '彩虹社') continue;
+        // if (corp === '彩虹社') continue;
         for(var key in nameId[corp]){
             console.log(key);
             let output = await crawlIcon(corp, key)
@@ -180,10 +189,10 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    // crawlAllIcon();
-    // crawl_str_ups();
+    crawlAllIcon();
+    crawl_str_ups();
     // to_number();
-    setInterval(crawl_str_ups, 1800000);
+    // setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
@@ -272,7 +281,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.port || 4000
+    const PORT = process.env.PORT || 443
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)
