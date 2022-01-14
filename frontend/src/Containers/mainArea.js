@@ -72,7 +72,6 @@ const InfoWrapper = styled.div`
 
 const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTemp, setFavorTemp, HoloIcon, NijiIcon, OtherIcon, WholeIcon, LiveStream, UpcomingStream }) => {
     const [favorChoose, setFavorChoose] = useState("請選擇公司")
-
     const handleChange = (value) => {
         setFavorChoose(value)
     }

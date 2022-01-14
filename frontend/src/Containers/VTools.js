@@ -58,6 +58,7 @@ const VTools = () => {
             const [task, payload] = JSON.parse(data)
             switch (task) {
                 case "icon": {
+                    console.log(payload)
                     setHoloIcon(payload[0]["allData"]["Hololive"])
                     setNijiIcon(payload[0]["allData"]["彩虹社"])
                     setOtherIcon(payload[0]["allData"]["其他"])
