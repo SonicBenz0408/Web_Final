@@ -27,6 +27,11 @@ const UpcomingSchema = new Schema({
     id: {
         type: String,
         required: [true, "Id field is required."]
+    },
+
+    timetonum: {
+        type: Number,
+        required: [true, "timetonum field is required"]
     }
 
 })
