@@ -17,7 +17,7 @@ import Stream from "./models/Stream.js"
 import Upcoming from "./models/Upcoming.js"
 import Icon from "./models/Icon.js"
 import wakeUpDyno from "./routes/wakeUpDyno.js"
-import sslRedirect from 'heroku-ssl-redirect'
+import herokuSSLRedirect from 'heroku-ssl-redirect'
 
 dotenv.config()
 
@@ -33,6 +33,8 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
+const sslRedirect = herokuSSLRedirect.default
+
 app.use(sslRedirect());
 
 const server = http.createServer(app)
