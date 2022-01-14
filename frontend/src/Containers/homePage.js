@@ -14,6 +14,7 @@ const DownWrapper = styled.div`
     height: 100%;
     background-color: rgb(18, 18, 18);
     display: flex;
+    padding-top: 75px ;
 }
 `
 const Home = ({ sendData, menuKey, setMenuKey, nowUser, setNowUser, userFavor, setUserFavor, HoloIcon, NijiIcon, OtherIcon, WholeIcon, LiveStream, UpcomingStream, setSignedIn, navigate }) => {
@@ -45,7 +46,7 @@ const Home = ({ sendData, menuKey, setMenuKey, nowUser, setNowUser, userFavor, s
         <Wrapper>
             <TopBar setMenuKey={setMenuKey} nowUser={nowUser} setNowUser={setNowUser} navigate={navigate} />
             <DownWrapper>
-                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} userFavor={userFavor} setFavorTemp={setFavorTemp} navigate={navigate}/>
+                <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} userFavor={userFavor} setFavorTemp={setFavorTemp} />
                 {Main}
             </DownWrapper>
         </Wrapper>

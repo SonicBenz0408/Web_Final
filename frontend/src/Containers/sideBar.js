@@ -3,17 +3,15 @@ import styled from "styled-components"
 import { HomeOutlined, HeartOutlined, ProfileOutlined } from "@ant-design/icons"
 
 const Wrapper = styled.div`
-    width: 200px;
+    width: 220px;
     height: 100%;
     display: flex;
     flex-direction: column;
     background-color: rgb(54,54,54);
     transition: .5s;
-    margin-top: 75px ;
-    position: fixed;
 `
 
-const SideBar = ({ nowUser, menuKey, setMenuKey, userFavor, setFavorTemp, navigate }) => {
+const SideBar = ({ nowUser, menuKey, setMenuKey, userFavor, setFavorTemp }) => {
     
     const handleMenuClick = (event) => {
         if(event.key === "favor") toFavor()

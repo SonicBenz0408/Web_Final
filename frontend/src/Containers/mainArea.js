@@ -6,12 +6,18 @@ const { Option } = Select
 
 
 const Wrapper = styled.div`
+    &::-webkit-scrollbar{
+        width:10px;
+        border-radious: 10px;
+    };
+    &::-webkit-scrollbar-thumb{
+        background-color: rgb(107, 105, 105);
+        border-radius: 2px;
+    };
     box-sizing: border-box;
     padding: 20px;
     width: 100%;
     height: 100% ;
-    padding-top: 90px;
-    margin-left: 200px ;
     overflow-y: scroll;
 `
 
