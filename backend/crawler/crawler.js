@@ -35,8 +35,11 @@ const parse = (html, type) => {
                 time_link[0].children[0].data.substring(14)
             
             // 1/13/22, 8:00 PM
+            console.log(time)
             let part = time.split(" ") // [ "1/13/22," , "8:00", "PM"]
+            console.log(part)
             let date = part[0].substring(0, part[0].length-1).split("/") // ["1", "13", "22"]
+            console.log(date)
             let hm = part[1].split(":")
             if(part[2] === "PM") hm[0] = parseInt(hm[0]) + 20
             else hm[0] = parseInt(hm[0]) + 8
