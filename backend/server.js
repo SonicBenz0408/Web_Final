@@ -35,14 +35,12 @@ const app = express()
 
 //const server = http.createServer(app)
 
-
 const server = https.createServer({
     key: fs.readFileSync("../server-key.pem"),
     cert: fs.readFileSync('../server-cert.pem'),
     requestCert: false,
     rejectUnauthorized: false
 }, app)
-
 
 const wss = new WebSocket.Server({ server })
 
@@ -71,7 +69,6 @@ const broadcastStream = (upstream) => {
     })
 }
 
-/*
 const to_number = (str) => {
     // 2022/1/13 晚上20:00
     // let str = "2023/1/1 凌晨0:00"
@@ -87,7 +84,7 @@ const to_number = (str) => {
     if (hm[1].length < 2) hm[1] = '0' + hm[1];
     return (parseInt(date[0]+date[1]+date[2]+hm[0]+hm[1]));
 }
-*/
+
 const init_vtuber = async () => {
     for (var key in nameId) {
         if(key === 'Hololive') continue;
@@ -193,7 +190,10 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    // crawlAllIcon();
+
+    // If db already has the data of icon -> comment
+    //crawlAllIcon();  
+    
     crawl_str_ups();
     setInterval(crawl_str_ups, 1800000);
 
@@ -231,7 +231,6 @@ db.once("open", async () => {
                         console.log("Username doesn't exist")
                     }
                     else{
-                        console.log(userHash)
                         const check = await bcrypt.compare(password, userHash[0].hash)
                         if(check){
                             sendData([ "login", [{ msg: "Login successfully!", status: "success", loginUser: username }]], ws)
@@ -244,6 +243,27 @@ db.once("open", async () => {
                     }
                     break
                 }
+
+                case "revise": {
+                    const { username, oldpassword, newpassword } = payload[0]
+                    const userHash = await User.find({username: username})
+                    
+                    const check = await bcrypt.compare(oldpassword, userHash[0].hash)
+                    if(check){
+                        const newHash = await bcrypt.hash(newpassword, saltRounds)
+                        await User.updateOne({username: username}, {$set: {hash: newHash}})
+
+                        sendData([ "revise", [{ msg: "Revise successfully!", status: "success" }]], ws)
+                        console.log(`${username} revises password!`)
+                    }
+                    else{
+                        sendData([ "revise", [{ msg: "Wrong password!", status: "unmatch"}]], ws)
+                        console.log(`${username}: wrong password!`)
+                    }
+                    
+                    break
+                }
+
                 case "regist": {
                     const { username, password } = payload[0]
                     const check = await User.find({username: username})
