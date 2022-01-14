@@ -1,7 +1,8 @@
 import WebSocket from "ws"
 import http from "http"
 //import https from "https"
-import fs from "fs"
+//import fs from "fs"
+import http from "http"
 import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
@@ -41,6 +42,7 @@ const server = https.createServer({
     rejectUnauthorized: false
 }, app)
 */
+
 const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
@@ -303,7 +305,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.PORT || 443
+    const PORT = process.env.PORT || 4000
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)

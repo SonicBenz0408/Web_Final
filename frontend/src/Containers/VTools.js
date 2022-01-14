@@ -45,7 +45,6 @@ const VTools = () => {
         await ws.current.send(JSON.stringify(data))
     }
     
-
     useEffect(async () => {
         
         ws.current = new WebSocket("ws://vtdd.herokuapp.com/:4001")
