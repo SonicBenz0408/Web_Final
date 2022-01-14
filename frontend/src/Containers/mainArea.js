@@ -1,7 +1,9 @@
 import styled from "styled-components"
 import { message, Select } from "antd"
 import { useState } from "react"
+import { HeartFilled } from "@ant-design/icons"
 const { Option } = Select
+
 
 const Wrapper = styled.div`
     box-sizing: border-box;
@@ -162,6 +164,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                         <div class="channelname">{Object.keys(icon)[0]}</div>
                         <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
                     </div>
+                    {(userFavor.indexOf(Object.keys(icon)[0]) === -1)? <></> : <HeartFilled className="has_add_favor" />}
                 </div>
             </a>
         )}
@@ -173,6 +176,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                         <div class="channelname">{Object.keys(icon)[0]}</div>
                         <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
                     </div>
+                    {(userFavor.indexOf(Object.keys(icon)[0]) === -1)? <></> : <HeartFilled className="has_add_favor" />}
                 </div>
             </a>
         )}
@@ -184,10 +188,49 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                         <div class="channelname">{Object.keys(icon)[0]}</div>
                         <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
                     </div>
+                    {(userFavor.indexOf(Object.keys(icon)[0]) === -1)? <></> : <HeartFilled className="has_add_favor" />}
                 </div>
             </a>
         )}
-    </> : <>
+    </> : (channelChoose === "已加入最愛") ? <>
+        {HoloIcon.map((icon) => (userFavor.indexOf(Object.keys(icon)[0]) !== -1)?
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                    <HeartFilled className="has_add_favor" />
+                </div>
+            </a> : <></>
+        )}
+        {NijiIcon.map((icon) => (userFavor.indexOf(Object.keys(icon)[0]) !== -1)?
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                    <HeartFilled className="has_add_favor" />
+                </div>
+            </a> : <></>
+        )}
+        {OtherIcon.map((icon) => (userFavor.indexOf(Object.keys(icon)[0]) !== -1)?
+            <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
+                <div class="listitem">
+                    <img src={Object.values(icon)[0][0]} alt=""/>
+                    <div class="text">
+                        <div class="channelname">{Object.keys(icon)[0]}</div>
+                        <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
+                    </div>
+                    <HeartFilled className="has_add_favor" />
+                </div>
+            </a> : <></>
+        )}
+    </> 
+    : <>
         {aimIcon2.map((icon) =>
             <a href={Object.values(icon)[0][1]} target="_blank" rel="noreferrer">
                 <div class="listitem">
@@ -196,6 +239,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                         <div class="channelname">{Object.keys(icon)[0]}</div>
                         <div class="company" style={{fontSize:10}}>{Object.values(icon)[0][2]}</div>
                     </div>
+                    {(userFavor.indexOf(Object.keys(icon)[0]) === -1)? <></> : <HeartFilled className="has_add_favor" />}
                 </div>
             </a>
         )}
@@ -260,6 +304,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
             <div style={{fontSize:16}}>{(channelChoose==="請選擇公司") ? "所有頻道" : channelChoose}</div>
             <Select defaultValue="請選擇公司" value={channelChoose} style={{ width: 120}} onChange={channelChange}>
                 <Option value="請選擇公司">請選擇公司</Option>
+                <Option value="已加入最愛">已加入最愛</Option>
                 <Option value="Hololive">Hololive</Option>
                 <Option value="彩虹社">彩虹社</Option>
                 <Option value="其他">其他</Option>

@@ -2,7 +2,6 @@ import WebSocket from "ws"
 import http from "http"
 //import https from "https"
 //import fs from "fs"
-import http from "http"
 import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
@@ -191,10 +190,9 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-
     // If db already has the data of icon -> comment
     //crawlAllIcon();  
-    
+
     //crawl_str_ups();
     // setInterval(crawl_str_ups, 1800000);
 
