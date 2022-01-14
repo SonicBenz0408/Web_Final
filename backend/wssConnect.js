@@ -28,7 +28,7 @@ const initData = async (ws) => {
                         upstream[key].live = [...upstream[key].live, [res[i]]];
                     }
                 })
-    await Upcoming.find({}, "-_id -__v").sort({ timetonum: -1 }).limit(200)
+    await Upcoming.find({}, "-_id -__v").sort({ created_at: -1 }).limit(200)
         .exec((err, res) => {
             if(err) throw err;
             // console.log("hi")
