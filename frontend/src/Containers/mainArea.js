@@ -152,7 +152,6 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
             </InfoWrapper>)}
     </> : <></>
 
-    //白癡要加的部分
     const listscene = (channelChoose === "請選擇公司") ?
     <>
         {HoloIcon.map((icon) =>
@@ -201,9 +200,6 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
             </a>
         )}
     </>
-    //白癡要加的部分
-
-
 
     const home = 
     <>

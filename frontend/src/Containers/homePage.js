@@ -43,7 +43,7 @@ const Home = ({ sendData, menuKey, setMenuKey, nowUser, setNowUser, userFavor, s
     
     return (
         <Wrapper>
-            <TopBar setMenuKey={setMenuKey} nowUser={nowUser} setNowUser={setNowUser} setSignedIn={setSignedIn} navigate={navigate} />
+            <TopBar setMenuKey={setMenuKey} nowUser={nowUser} setNowUser={setNowUser} navigate={navigate} />
             <DownWrapper>
                 <SideBar nowUser={nowUser} menuKey={menuKey} setMenuKey={setMenuKey} userFavor={userFavor} setFavorTemp={setFavorTemp} navigate={navigate}/>
                 {Main}

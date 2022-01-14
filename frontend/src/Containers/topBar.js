@@ -2,6 +2,8 @@ import styled from "styled-components"
 import { Dropdown, Menu } from "antd"
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { NavLink } from "react-router-dom";
+import Cookies from "js-cookie"
+
 const Wrapper = styled.div`
     width: 100% ;
     height: 75px ;
@@ -12,16 +14,20 @@ const Wrapper = styled.div`
     z-index: 1;
 `
 
-const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
+const TopBar = ({ setMenuKey, nowUser, setNowUser, navigate }) => {
     
     const logout = () => {
-        setSignedIn(false)
         setNowUser(null)
-        navigate("/login")
+        Cookies.remove("user")
+        navigate("/")
     }
 
     const toHome = () => {
         setMenuKey("home")
+    }
+
+    const toRevisePw = () => {
+        navigate("/revise")
     }
 
     const loginMenu = (
@@ -32,7 +38,7 @@ const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
     const hasLoginMenu = (
         <>
             <p>{nowUser}</p>
-            <Menu.Item key="revisePw">
+            <Menu.Item key="revisePw" onClick={toRevisePw}>
                 <p>修改密碼</p>
             </Menu.Item>
             <Menu.Item key="logout" onClick={logout}>

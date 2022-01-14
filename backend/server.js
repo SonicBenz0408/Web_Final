@@ -189,8 +189,11 @@ const crawl_str_ups = async() => {
 
 db.once("open", async () => {
     console.log("MongoDB connected")
-    crawlAllIcon();
-    crawl_str_ups();
+
+    // If db already has the data of icon -> comment
+    //crawlAllIcon();  
+    
+    //crawl_str_ups();
     // setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
@@ -227,7 +230,6 @@ db.once("open", async () => {
                         console.log("Username doesn't exist")
                     }
                     else{
-                        console.log(userHash)
                         const check = await bcrypt.compare(password, userHash[0].hash)
                         if(check){
                             sendData([ "login", [{ msg: "Login successfully!", status: "success", loginUser: username }]], ws)
@@ -240,6 +242,27 @@ db.once("open", async () => {
                     }
                     break
                 }
+
+                case "revise": {
+                    const { username, oldpassword, newpassword } = payload[0]
+                    const userHash = await User.find({username: username})
+                    
+                    const check = await bcrypt.compare(oldpassword, userHash[0].hash)
+                    if(check){
+                        const newHash = await bcrypt.hash(newpassword, saltRounds)
+                        await User.updateOne({username: username}, {$set: {hash: newHash}})
+
+                        sendData([ "revise", [{ msg: "Revise successfully!", status: "success" }]], ws)
+                        console.log(`${username} revises password!`)
+                    }
+                    else{
+                        sendData([ "login", [{ msg: "Wrong password!", status: "failed"}]], ws)
+                        console.log(`${username}: wrong password!`)
+                    }
+                    
+                    break
+                }
+
                 case "regist": {
                     const { username, password } = payload[0]
                     const check = await User.find({username: username})

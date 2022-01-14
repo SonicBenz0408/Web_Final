@@ -5,6 +5,8 @@ import SignIn from "./signIn"
 import { Routes, Route, useNavigate } from "react-router-dom"
 import Home from "./homePage"
 import Regist from "./regist"
+import Cookies from "js-cookie"
+import Revise from "./revise";
 
 const Wrapper = styled.div`
     height: 100vh ;
@@ -44,12 +46,16 @@ const VTools = () => {
     }
     
 
-    useEffect(() => {
-        ws.current = new WebSocket("wss://vtdd.herokuapp.com/:54757")
+    useEffect(async () => {
+        
+        ws.current = new WebSocket("ws://vtdd.herokuapp.com/:4001")
+        //ws.current = new WebSocket("ws://localhost:4000")
         ws.current.onopen = async () => {
             console.log("connected")
+            
             await sendData(["icon", {}])
             await sendData(["upstream", {}])
+            
             console.log("initialization over")
         }
 
@@ -72,7 +78,14 @@ const VTools = () => {
                         wholeTemp[Object.keys(e)[0]] = Object.values(e)[0]
                     })
                     setWholeIcon(wholeTemp)
+
                     console.log("icon update")
+
+                    const cookieUser = Cookies.get("user")
+                    if(cookieUser){
+                        await sendData(["favor", [{ username: cookieUser }]])
+                        setNowUser(cookieUser)
+                    }
                     break
                 }
                 case "upstream": {
@@ -82,6 +95,7 @@ const VTools = () => {
                 }
                 case "favor": {
                     setUserFavor(payload[0]["favor"])
+                    console.log("favorupdate")
                     break
                 }
                 case "login": {
@@ -100,6 +114,7 @@ const VTools = () => {
                         message.success(msg, 2)
                         //setSignedIn(true)
                         setNowUser(loginUser)
+                        Cookies.set('user', loginUser, { expires: 1 })
                         await sendData(["favor", [{ username: loginUser }]])
                         setMenuKey("home")
                         navigate("/")
@@ -127,6 +142,7 @@ const VTools = () => {
                 default: break
             }
         }
+        
     }, [navigate])
 
     useEffect(() => {
@@ -203,13 +219,21 @@ const VTools = () => {
         navigate={navigate}
     />
 
+    const reviseScene = <Revise
+        client={ws.current}
+        nowUser={nowUser}
+        setNowUser={setNowUser}
+        sendData={sendData}
+        navigate={navigate}
+    />
     return (
         <Wrapper>
             <Routes>
                 <Route exact path="/" element={homeScene} />
                 <Route path="/home" element={homeScene} />
                 <Route path="/login" element={signInScene} />
-                <Route path="/register" element={registScene} />       
+                <Route path="/register" element={registScene} />  
+                <Route path="/revise" element={reviseScene} />
             </Routes>
         </Wrapper>
     )
