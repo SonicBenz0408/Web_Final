@@ -16,6 +16,7 @@ import Vtuber from "./models/Vtuber.js"
 import Stream from "./models/Stream.js"
 import Upcoming from "./models/Upcoming.js"
 import Icon from "./models/Icon.js"
+import wakeUpDyno from "./routes/wakeUpDyno.js"
 
 dotenv.config()
 
@@ -192,9 +193,9 @@ const crawl_str_ups = async() => {
 db.once("open", async () => {
     console.log("MongoDB connected")
     // crawlAllIcon();
-    // crawl_str_ups();
+    crawl_str_ups();
     // to_number();
-    // setInterval(crawl_str_ups, 1800000);
+    setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
         ws.onmessage = async (byteString) => {
@@ -286,6 +287,8 @@ db.once("open", async () => {
     const PORT = process.env.PORT || 4000
 
     server.listen(PORT, () => {
+        const DYNO_URL = "https://vtdd.herokuapp.com/"
+        wakeUpDyno(DYNO_URL)
         console.log(`Listening on http://localhost:${PORT}`)
     })
 })
