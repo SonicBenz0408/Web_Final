@@ -1,7 +1,7 @@
 import WebSocket from "ws"
-//import http from "http"
-import https from "https"
-import fs from "fs"
+import http from "http"
+//import https from "https"
+//import fs from "fs"
 import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
@@ -32,14 +32,16 @@ const saltRounds = 10
 
 const app = express()
 
-//const server = http.createServer(app)
+const server = http.createServer(app)
 
+/*
 const server = https.createServer({
     key: fs.readFileSync("../server-key.pem"),
     cert: fs.readFileSync('../server-cert.pem'),
     requestCert: false,
     rejectUnauthorized: false
 }, app)
+*/
 
 const wss = new WebSocket.Server({ server })
 
@@ -281,7 +283,7 @@ db.once("open", async () => {
         }
     })
     
-    const PORT = process.env.PORT || 443
+    const PORT = process.env.PORT || 4000
 
     server.listen(PORT, () => {
         console.log(`Listening on http://localhost:${PORT}`)
