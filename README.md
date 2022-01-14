@@ -3,7 +3,7 @@
 ## Website Name ( zh ) : ⭐夸黑退散⭐
 
 ## Deploy Services : 
-* Frontend : https://web-final-plum.vercel.app/  (Vercel)
+* Frontend : https://vtdd.vercel.app/  (Vercel)
 * Backend :  https://vtdd.herokuapp.com/ (Heroku)
 
 ## Introduction
