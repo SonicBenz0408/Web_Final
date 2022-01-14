@@ -93,11 +93,6 @@ const SignIn = ({ username, password, nowUser, sendData,/* setSignedIn,*/ setUse
                         onChange={handleChange(setPassword)}
                     />
                 </Form.Item>
-                <Form.Item>
-                    <Form.Item noStyle>
-                        <Checkbox checked={keep} onChange={handleKeep(setKeep)}>記住我的帳號</Checkbox>
-                    </Form.Item>
-                </Form.Item>
             
                 <Form.Item className="login-button-container">
                     <Button type="primary" htmlType="submit" className="login-form-button" onClick={sendLogin}>
