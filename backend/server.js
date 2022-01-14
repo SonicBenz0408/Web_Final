@@ -1,7 +1,7 @@
 import WebSocket from "ws"
-//import http from "http"
-import https from "https"
-import fs from "fs"
+import http from "http"
+//import https from "https"
+//import fs from "fs"
 import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
@@ -17,6 +17,7 @@ import Stream from "./models/Stream.js"
 import Upcoming from "./models/Upcoming.js"
 import Icon from "./models/Icon.js"
 import wakeUpDyno from "./routes/wakeUpDyno.js"
+import sslRedirect from 'heroku-ssl-redirect'
 
 dotenv.config()
 
@@ -32,15 +33,18 @@ mongoose.connect(process.env.MONGO_URL, {
 const saltRounds = 10
 
 const app = express()
+app.use(sslRedirect());
 
-//const server = http.createServer(app)
+const server = http.createServer(app)
 
+/*
 const server = https.createServer({
     key: fs.readFileSync("../server-key.pem"),
     cert: fs.readFileSync('../server-cert.pem'),
     requestCert: false,
     rejectUnauthorized: false
 }, app)
+*/
 
 const wss = new WebSocket.Server({ server })
 
