@@ -6,13 +6,12 @@ import express from "express"
 import mongoose from "mongoose" 
 import dotenv from "dotenv-defaults"
 
-import { sendData, sendStatus, initData, iconData } from "./wssConnect.js"
+import { sendData, initData, iconData } from "./wssConnect.js"
 
 import User from "./models/User.js"
 import bcrypt from "bcrypt"
 import { crawl, crawlIcon } from "./crawler/crawler.js"
 import nameId from "./crawler/nameId.json"
-import Vtuber from "./models/Vtuber.js"
 import Stream from "./models/Stream.js"
 import Upcoming from "./models/Upcoming.js"
 import Icon from "./models/Icon.js"
@@ -52,69 +51,12 @@ const wss = new WebSocket.Server({ server })
 
 const db = mongoose.connection
 
-const broadcastMessage = (data, status) => {
-    wss.clients.forEach(async (client) => {
-        console.log("data", data)
-        console.log("status", status)
-        sendData(data, client)
-        sendStatus(status, client)
-    })
-}
-
-const broadcastIcon = (icon) => {
-    console.log("boardcastIcon!!");
-    wss.clients.forEach(async (client) => {
-        sendData(["icon", [{ icon }]], client);
-    })
-}
-
 const broadcastStream = (upstream) => {
     console.log("boardcast!!");
     wss.clients.forEach(async (client) => {
         sendData(["upstream", [{upstream}]], client);
     })
 }
-
-const to_number = (str) => {
-    // 2022/1/13 晚上20:00
-    // let str = "2023/1/1 凌晨0:00"
-    str = str.split(" ")
-    let date = str[0].split("/");
-    if (date.length < 3)
-        return 0;
-    if (date[1].length < 2) date[1] = '0' + date[1];
-    if (date[2].length < 2) date[2] = '0' + date[2];
-    let len = str[1].length;
-    let hm = str[1].substring(2, len).split(":");
-    if (hm[0].length < 2) hm[0] = '0' + hm[0];
-    if (hm[1].length < 2) hm[1] = '0' + hm[1];
-    return (parseInt(date[0]+date[1]+date[2]+hm[0]+hm[1]));
-}
-
-const init_vtuber = async () => {
-    for (var key in nameId) {
-        if(key === 'Hololive') continue;
-        for (var keykey in nameId[key]){
-            if (nameId[key].hasOwnProperty(keykey) && key === 'Hololive') {
-                // let output = await crawl(key, keykey);
-                // console.log(output);
-                const check = await Vtuber.find({name: keykey});
-                if(check.length !== 0){
-                    console.log(`${keykey} exists`);
-                }
-                else{
-                    const vtuber = new Vtuber({ 
-                        name: keykey, 
-                        id: nameId[key][keykey], 
-                        corp: key, 
-                        channel : 'https://www.youtube.com/channel/' + nameId[key][keykey]
-                    });
-                    await vtuber.save();
-                }
-            }
-        }
-    }
-};
 
 const crawlAllIcon = async () => {
     let allIcon = []
@@ -134,7 +76,6 @@ const crawlAllIcon = async () => {
         await icon.save()
     }
 
-    // broadcastIcon(allIcon)
 }
 
 const crawl_str_ups = async() => {

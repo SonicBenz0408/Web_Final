@@ -7,10 +7,6 @@ const sendData = (data, ws) => {
     ws.send(JSON.stringify(data))
 }
 
-const sendStatus = (payload, ws) => {
-    sendData(["status", payload], ws)
-}
-
 const getKeyByValue = (object, value) => {
     return Object.keys(object).find(key => object[key] === value);
   }
@@ -66,11 +62,11 @@ const iconData = async (ws) => {
     
     for(let i=0 ; i < dbOtherIcon.length ; i++){
         let name = {}
-        name[dbOtherIcon[i]["name"]] = [dbOtherIcon[i]["icon"], dbOtherIcon[i]["url"], dbNijiIcon[i]["corp"]]
+        name[dbOtherIcon[i]["name"]] = [dbOtherIcon[i]["icon"], dbOtherIcon[i]["url"], dbOtherIcon[i]["corp"]]
         allData["其他"].push(name);
     }
     sendData(["icon", [{ allData }]], ws)
 
 }
 
-export { sendData, sendStatus, initData, iconData }
+export { sendData, initData, iconData }

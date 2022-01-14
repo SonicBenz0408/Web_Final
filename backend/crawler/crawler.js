@@ -66,9 +66,11 @@ const parse = (html, type) => {
                     }
                 }
                 
+                hm[0] = String(hm[0])
+                
                 if (date[0].length < 2) date[0] = '0' + date[0];
                 if (date[1].length < 2) date[1] = '0' + date[1];
-                if (hm[0].length < 2) hm[0] = '0' + String(hm[0]);
+                if (hm[0].length < 2) hm[0] = '0' + hm[0];
                 if (hm[1].length < 2) hm[1] = '0' + hm[1];
 
                 time = `20${date[2]}/${date[0]}/${date[1]} ${hm[0]}:${hm[1]}`
