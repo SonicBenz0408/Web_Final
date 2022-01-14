@@ -54,7 +54,8 @@ const TopBar = ({ setMenuKey, nowUser, setNowUser, setSignedIn, navigate }) => {
     return(
         <Wrapper>
             <div className="logo" onClick={toHome}>
-                <div>VTDD</div>
+                <img className="logo-img" src="https://i.imgur.com/1hkHkcZ.png" alt="" />
+                <div>夸黑退散</div>
             </div>
             <Dropdown overlay={menu} trigger="click" className="youraccount">
                 <AccountCircleIcon className="user-icon" fontSize=""/>

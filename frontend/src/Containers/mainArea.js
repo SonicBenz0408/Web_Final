@@ -10,7 +10,8 @@ const Wrapper = styled.div`
     padding: 20px;
     width: 100%;
     height: 100% ;
-    margin-top: 75px;
+    padding-top: 90px;
+    margin-left: 200px ;
     overflow-y: scroll;
 `
 
@@ -278,6 +279,7 @@ const MainArea = ({ sendData, menuKey, nowUser, userFavor, setUserFavor, favorTe
                             <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]}><img className="channel-small-pic" src={WholeIcon[stream[0].name][0]} alt="" /></a>
                             <a target="_blank" rel="noreferrer" href={WholeIcon[stream[0].name][1]} className="channel-small-name">{stream[0].name}</a>
                         </div>
+                        <div className="stream-time">{stream[0].time}</div>
                     </div>
                 </StreamWrapper></a>
             )}  
