@@ -1,6 +1,6 @@
 import WebSocket from "ws"
-import http from "http"
-//import https from "https"
+//import http from "http"
+import https from "https"
 //import fs from "fs"
 import express from "express"
 import mongoose from "mongoose" 
@@ -33,16 +33,16 @@ const saltRounds = 10
 
 const app = express()
 
-const server = http.createServer(app)
+//const server = http.createServer(app)
 
-/*
+
 const server = https.createServer({
     key: fs.readFileSync("../server-key.pem"),
     cert: fs.readFileSync('../server-cert.pem'),
     requestCert: false,
     rejectUnauthorized: false
 }, app)
-*/
+
 
 const wss = new WebSocket.Server({ server })
 
@@ -71,6 +71,7 @@ const broadcastStream = (upstream) => {
     })
 }
 
+/*
 const to_number = (str) => {
     // 2022/1/13 晚上20:00
     // let str = "2023/1/1 凌晨0:00"
@@ -86,7 +87,7 @@ const to_number = (str) => {
     if (hm[1].length < 2) hm[1] = '0' + hm[1];
     return (parseInt(date[0]+date[1]+date[2]+hm[0]+hm[1]));
 }
-
+*/
 const init_vtuber = async () => {
     for (var key in nameId) {
         if(key === 'Hololive') continue;
@@ -161,7 +162,7 @@ const crawl_str_ups = async() => {
                         title: output[1][i].title,
                         id: nameId[corp][key],
                         time: output[1][i].time,
-                        timetonum: to_number(output[1][i].time)
+                        timetonum: output[1][i].timetonum
                     };
                     // console.log(to_number(output[1][i].time))
                     output_up.push(tmp_up);
@@ -194,7 +195,6 @@ db.once("open", async () => {
     console.log("MongoDB connected")
     // crawlAllIcon();
     crawl_str_ups();
-    // to_number();
     setInterval(crawl_str_ups, 1800000);
 
     wss.on("connection", (ws) => {
