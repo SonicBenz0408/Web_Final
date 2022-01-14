@@ -71,7 +71,9 @@ const parse = (html, type) => {
             if (hm[1].length < 2) hm[1] = '0' + hm[1];
 
             time = `20${date[2]}/${date[0]}/${date[1]} ${hm[0]}:${hm[1]}`
+            console.log(time)
             var timetonum = parseInt(`${date[2]}${date[0]}${date[1]}${hm[0]}${hm[1]}`)
+            
             results.push({addr: addr, img: img, title: title, time: time, timetonum: timetonum})
         })
     }
