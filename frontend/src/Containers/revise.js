@@ -64,6 +64,10 @@ const Revise = ({client, nowUser, setNowUser, sendData, /*setRegister,*/ navigat
         }
     }
     return (
+        !nowUser ? 
+        <Title>
+            <h1 className="login-title">Login First</h1>
+        </Title> :
         <>
             <h1 className="login-title">修改密碼!</h1>
             <Form
