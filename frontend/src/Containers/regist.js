@@ -32,10 +32,7 @@ const Regist = ({client, sendData, setUsername, /*setRegister,*/ navigate}) => {
 
     client.onmessage = (byteString) => {
         const { data } = byteString
-        console.log(data)
         const [task, payload] = JSON.parse(data)
-        console.log(task)
-        console.log(payload)
         switch (task) {
 
             case "regist": {
