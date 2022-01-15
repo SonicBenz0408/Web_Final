@@ -40,3 +40,6 @@
 ## Warning :
 * If you want to deploy on localhost, remember to change the websocket client and server url.
 * If you want to deploy server on Heroku, due to region problem, you should use the code in "heroku" branch (To get correct time).
+
+## Reference :
+* https://holodex.net/
